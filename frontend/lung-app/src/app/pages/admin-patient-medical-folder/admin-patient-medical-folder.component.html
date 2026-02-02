@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+ 
+</head>
+<body>
+  <div class="sidebar" [class.hidden]="isSidebarHidden">
+
+     <div class="logo-container">
+    <img src="images/logo app.png" alt="LungApp Logo" class="logo-img" />
+  </div>
+    <ul>
+  <li (click)="navigateToDashboard()" [class.active]="isActive('/admin-dashboard')" style="cursor:pointer;">
+  <i class="fas fa-chart-line"></i>
+  <span class="label">Dashboard</span>
+</li>
+
+
+
+<li (click)="navigateToProfile()" [class.active]="isActive('/admin/profile')" style="cursor: pointer;">
+  <i class="fas fa-user"></i>
+  <span class="label">My Profile</span>
+</li>
+
+
+  <li (click)="navigateToPatients()" [class.active]="isActive('/admin-patient-manager')" style="cursor: pointer;">
+  <i class="fas fa-procedures"></i>
+  <span class="label">Patient Management</span>
+</li>
+    <li (click)="navigateToDoctors()" [class.active]="isActive('/admin-doctor-management')" style="cursor: pointer;">
+  <i class="fas fa-user-md"></i>
+  <span class="label">Doctor Management</span>
+  <li (click)="logout()">
+  <i class="fas fa-sign-out-alt"></i>
+  <span class="label">Sign Out</span>
+</li>
+
+</ul>
+
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <div class="toggle-btn" (click)="toggleSidebar()">☰</div>
+      <!-- LOGO -->
+  
+   
+      <div class="admin-info">
+  <img
+    *ngIf="user?.profileImage"
+    [src]="user.profileImage"
+    alt="Profile Image"
+    class="profile-img"
+  />
+  <span class="admin-name"> Admin: {{ user.firstName }} {{ user.lastName }}</span>
+</div>
+
+    </div>
+    
+<div class="patient-medical-folder">
+  <h2 class="section-title">Patient medical record of  {{ patientData?.firstName }} {{ patientData?.lastName }}</h2>
+
+  <div class="medical-card">
+    <div class="card-header">
+      <h3>Medical Record Number: {{ patientData?.id}}</h3>
+      <i class="fas fa-cog"></i>
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <p><strong>Name (Last, First):</strong> {{ patientData?.firstName }} {{ patientData?.lastName }}</p>
+        
+          <p><strong>Doctor in char</strong> {{ patientData?.doctor_name }}</p>
+
+        </div>
+        <div class="col">
+          
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-subtitle">📋 Clinical Information</div>
+  <div class="medical-data">
+    <p><strong>Age:</strong> {{ patientData?.age }}</p>
+   
+    <p><strong>Gender:</strong> {{ getGenderLabel(patientData?.gender) }}</p>
+
+    
+    <p><strong>Race:</strong> {{ getRaceLabel(patientData?.race) }}</p>
+
+
+    <p><strong>height:</strong> {{ patientData?.height }} in</p>
+    <p><strong>weight:</strong> {{ patientData?.weight }} lbs</p>
+    <p><strong>Cancer Diagnosis:</strong> {{ patientData?.diagnosed ? 'Yes' : 'No' }}</p>
+    <p><strong>Stade (AJCC 6e):</strong> {{ patientData?.de_stag }}</p>
+    <p><strong>Stade (AJCC 7e):</strong> {{ patientData?.de_stag_7thed }}</p>
+    
+
+    <p><strong>Histological type:</strong> {{ getHistologyLabel(patientData?.histology_cat) }}</p>
+
+    <p><strong>Lesion size:</strong> {{ patientData?.lesionsize }} mm</p>
+    <p><strong>Treatment:</strong> {{ getTreatmentLabel(patientData?.treatlc) }}</p>
+
+    <p><strong>Cancer Confirmed:</strong> {{ patientData?.lung_cancer ? 'Yes' : 'No' }}</p>
+    <p><strong>RADIATION_THERAPY:</strong> {{ patientData?.RADIATION_THERAPY ? 'Yes' : 'No' }}</p>
+  </div>
+
+  <div class="section-subtitle">🩺 Medical History</div>
+<ul class="medical-history">
+  <li><strong>Adult Asthma</strong> {{ patientData?.diagadas ? 'Yes' : 'No' }}</li>
+  <li><strong>Asbestosis:</strong> {{ patientData?.diagasbe ? 'Yes' : 'No' }}</li>
+  <li><strong>Bronchitis:</strong> {{ patientData?.diagbron ? 'Yes' : 'No' }}</li>
+  <li><strong>Asthma (childhood):</strong> {{ patientData?.diagchas ? 'Yes' : 'No' }}</li>
+  <li><strong> Chronic Bronchitis:</strong> {{ patientData?.diagchro ? 'Yes' : 'No' }}</li>
+  <li><strong>Chronic Obstructive Pulmonary Disease:</strong> {{ patientData?.diagcopd ? 'Yes' : 'No' }}</li>
+  <li><strong>Diabetes:</strong> {{ patientData?.diagdiab ? 'Yes' : 'No' }}</li>
+  <li><strong>Emphysema:</strong> {{ patientData?.diagemph ? 'Yes' : 'No' }}</li>
+  <li><strong>Pulmonary Fibrosis:</strong> {{ patientData?.diagfibr ? 'Yes' : 'No' }}</li>
+  <li><strong>Heart Disease:</strong> {{ patientData?.diaghear ? 'Yes' : 'No' }}</li>
+  <li><strong>Hypertension:</strong> {{ patientData?.diaghype ? 'Yes' : 'No' }}</li>
+  <li><strong>Pneumonia:</strong> {{ patientData?.diagpneu ? 'Yes' : 'No' }}</li>
+  <li><strong>Sarcoidosis:</strong> {{ patientData?.diagsarc ? 'Yes' : 'No' }}</li>
+  <li><strong>Silicosis:</strong> {{ patientData?.diagsili ? 'Yes' : 'No' }}</li>
+  <li><strong>Stroke:</strong> {{ patientData?.diagstro ? 'Yes' : 'No' }}</li>
+  <li><strong>Tuberculosis:</strong> {{ patientData?.diagtube ? 'Yes' : 'No' }}</li>
+  <li><strong>Lung Cancer:</strong> {{ patientData?.canclung ? 'Yes' : 'No' }}</li>
+</ul>
+
+
+  <div class="section-subtitle">🚬 Smoking</div>
+  <div class="smoking-data">
+    <p><strong>Status:</strong> {{ patientData?.cigsmok == 1 ? 'Fumeur actuel' : 'Ancien fumeur' }}</p>
+    <p><strong>Age Quit Smoking:</strong> {{ patientData?.age_quit }}</p>
+    <p><strong>Pack Years:</strong> {{ patientData?.pkyr }}</p>
+    <p><strong>Cigarettes per Day:</strong> {{ patientData?.smokeday }}</p>
+    <p><strong>Years of Smoking:</strong> {{ patientData?.smokeyr }}</p>
+  </div>
+
+  <div class="section-subtitle">🧪 CT Scan Data</div>
+  <div class="ct-data">
+    <img [src]="'http://localhost:5000' + patientData.ct_scan_image" *ngIf="patientData.ct_scan_image" alt="CT Scan Image" />
+    
+
+  </div>
+  <div class="section-subtitle">📈 Cancer Progression</div>
+<div class="progression-data">
+  <p><strong>Confirmed Progression :</strong>
+    {{ patientData?.progressed_ever === true ? 'Yes' :
+       patientData?.progressed_ever === false ? 'No' :
+       'Non renseigné' }}
+  </p>
+
+  <p><strong>Days Until First Progression</strong> {{ patientData?.prog_days_1st || 'Non renseigné' }}</p>
+  <p><strong>Cancer-Free Days:</strong> {{ patientData?.canc_free_days || 'Non renseigné' }}</p>
+  <p><strong>Days Since Diagnosis</strong> {{ patientData?.candx_days || 'Non renseigné' }}</p>
+</div>
+
+
+  <div class="section-subtitle">🧬 Genetic Data</div>
+<div class="genetic-data">
+  <div *ngFor="let gene of genes">
+    <p>
+      <strong>{{ gene }} :</strong>
+      {{ cnaLabels[patientData?.genetic_alterations?.[gene + '_cna']] || 'Unknown' }}
+    </p>
+  </div>
+</div>
+
+
+
+
+<div class="section-subtitle">🧪 Hypoxia Scores</div>
+<div class="hypoxia-data">
+  <p><strong>RAGNUM Hypoxia Score:</strong> {{ patientData?.hypoxia_scores?.RAGNUM_HYPOXIA_SCORE }}</p>
+  <p><strong>BUFFA Hypoxia Score:</strong> {{ patientData?.hypoxia_scores?.BUFFA_HYPOXIA_SCORE }}</p>
+</div>
+
+
+<div class="section-subtitle">🌍 Ancestry Scores</div>
+<div class="ancestry-data">
+  <p><strong>EUR:</strong> {{ patientData?.ancestry_scores?.EUR }}</p>
+  <p><strong>AFR:</strong> {{ patientData?.ancestry_scores?.AFR }}</p>
+  <p><strong>EAS:</strong> {{ patientData?.ancestry_scores?.EAS }}</p>
+  <p><strong>AMR:</strong> {{ patientData?.ancestry_scores?.AMR }}</p>
+  <p><strong>SAS:</strong> {{ patientData?.ancestry_scores?.SAS }}</p>
+</div>
+
+</div>
+
+    
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p>&copy; 2025 Pulmo Precision AI. All rights reserved.</p>
+    </div>
+  </div>
+
+
+</body>
+</html>

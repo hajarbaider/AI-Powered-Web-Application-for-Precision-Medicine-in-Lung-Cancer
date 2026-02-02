@@ -1,0 +1,62 @@
+[
+    {
+        "title": "Targeted Therapies for Lung Cancer Patients With Oncogenic Driver Molecular Alterations.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34985916/",
+        "category": "Clinical Trial",
+        "summary": "Lung cancer has traditionally been classified by histology. A greater understanding of disease biology and the identification of oncogenic driver alterations has dramatically altered the therapeutic landscape. The new classification paradigm of non-small-cell lung cancer is further characterized by molecularly defined subsets actionable with targeted therapies. This review encompasses the current standards of care for targeted therapies in lung cancer with driver molecular alterations.",
+        "highlighted_summary": "<mark class='tag biological_structure' title='Biological_structure'>Lung</mark> cancer has traditionally been classified by histology. A greater understanding of <mark class='tag diagnostic_procedure' title='Diagnostic_procedure'>disease</mark> biology and the identification of oncogenic driver alterations has dramatically altered the therapeutic landscape. The new classification paradigm of non-small-cell <mark class='tag biological_structure' title='Biological_structure'>lung</mark> cancer is further characterized by molecularly defined subsets actionable with targeted therapies. This review encompasses the current standards of care for <mark class='tag therapeutic_procedure' title='Therapeutic_procedure'>targeted therapies</mark> in <mark class='tag biological_structure' title='Biological_structure'>lung</mark> cancer with driver molecular alterations.",
+        "rouge_scores": {
+            "rouge-1": 0.8656716417910447,
+            "rouge-2": 0.8181818181818182,
+            "rouge-L": 0.8656716417910447
+        }
+    },
+    {
+        "title": "Biomarker-Targeted Therapies in Non-Small Cell Lung Cancer: Current Status and Perspectives.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36291069/",
+        "category": "Treatment",
+        "summary": "Non-small-cell lung cancer (NSCLC) is one of the most common malignancies and the leading causes of cancer-related death worldwide. Despite many therapeutic advances in the past decade, NSCLC remains an incurable disease for the majority of patients. Molecular targeted therapies and immunotherapies have significantly improved the prognosis.",
+        "highlighted_summary": "<mark class='tag disease_disorder' title='Disease_disorder'>Non</mark>-<mark class='tag disease_disorder' title='Disease_disorder'>small</mark>-<mark class='tag disease_disorder' title='Disease_disorder'>cell</mark> <mark class='tag disease_disorder' title='Disease_disorder'>lung cancer</mark> (<mark class='tag disease_disorder' title='Disease_disorder'>NS</mark><mark class='tag disease_disorder' title='Disease_disorder'>CL</mark>C) is one of the most common mali<mark class='tag disease_disorder' title='Disease_disorder'>gnancies</mark> and the leading causes of cancer-related death worldwide. Despite many therapeutic advances in the past decade, <mark class='tag disease_disorder' title='Disease_disorder'>NS</mark><mark class='tag disease_disorder' title='Disease_disorder'>CL</mark>C remains an incurable disease for the majority of patients. <mark class='tag diagnostic_procedure' title='Diagnostic_procedure'>Molecular targeted therapies</mark> and <mark class='tag diagnostic_procedure' title='Diagnostic_procedure'>im</mark><mark class='tag diagnostic_procedure' title='Diagnostic_procedure'>munotherapies</mark> have significantly improved the prognosis.",
+        "rouge_scores": {
+            "rouge-1": 0.7936507936507937,
+            "rouge-2": 0.7903225806451613,
+            "rouge-L": 0.7936507936507937
+        }
+    },
+    {
+        "title": "Implementing circulating tumor DNA as a prognostic biomarker in resectable non-small cell lung cancer.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38839544/",
+        "category": "Clinical Trial",
+        "summary": "Systemic treatment of resectable non-small cell lung cancer (NSCLC) is evolving. Circulating tumor DNA (ctDNA) detection at clinical diagnosis, during neoadjuvant therapy, or after resection may discern high-risk patients who might benefit from therapy escalation or switch.",
+        "highlighted_summary": "Systemic treatment of resectable non-small cell <mark class='tag disease_disorder' title='Disease_disorder'>lung cancer</mark> (<mark class='tag disease_disorder' title='Disease_disorder'>NS</mark><mark class='tag disease_disorder' title='Disease_disorder'>CL</mark>C) is evolving. Circulating <mark class='tag sign_symptom' title='Sign_symptom'>tumor</mark> DNA (ctDNA) detection at clinical diagnosis, during neoadjuvant therapy, or after <mark class='tag therapeutic_procedure' title='Therapeutic_procedure'>res</mark><mark class='tag therapeutic_procedure' title='Therapeutic_procedure'>ection</mark> may discern <mark class='tag severity' title='Severity'>high</mark>-risk patients who might benefit from therapy escalation or switch.",
+        "rouge_scores": {
+            "rouge-1": 0.7358490566037735,
+            "rouge-2": 0.7115384615384615,
+            "rouge-L": 0.7358490566037735
+        }
+    },
+    {
+        "title": "Organoid Cultures as Preclinical Models of Non-Small Cell Lung Cancer.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31694835/",
+        "category": "Clinical Trial",
+        "summary": "Non-small cell lung cancer (NSCLC) is the most common cause of cancer-related deaths worldwide. There is an unmet need to develop novel clinically relevant models of NSCLC to accelerate identification of drug targets and our understanding of the disease. We have identified cell culture conditions favoring the establishment of short-term and long-term organoids derived from primary lung patient and PDX tumor tissue.",
+        "highlighted_summary": "Non-small cell <mark class='tag biological_structure' title='Biological_structure'>lung</mark> cancer (<mark class='tag disease_disorder' title='Disease_disorder'>NS</mark><mark class='tag disease_disorder' title='Disease_disorder'>CL</mark>C) is the most common cause of cancer-related deaths worldwide. There is an unmet need to develop novel clinically relevant models of <mark class='tag disease_disorder' title='Disease_disorder'>NS</mark>CLC to accelerate identification of drug targets and our understanding of the disease. We have identified cell <mark class='tag diagnostic_procedure' title='Diagnostic_procedure'>culture</mark> conditions favoring the establishment of <mark class='tag detailed_description' title='Detailed_description'>short</mark>-term and <mark class='tag detailed_description' title='Detailed_description'>long</mark>-term <mark class='tag diagnostic_procedure' title='Diagnostic_procedure'>organ</mark>oids derived from primary <mark class='tag biological_structure' title='Biological_structure'>lung</mark> patient and PDX tumor tissue.",
+        "rouge_scores": {
+            "rouge-1": 0.7575757575757576,
+            "rouge-2": 0.6153846153846154,
+            "rouge-L": 0.6818181818181818
+        }
+    },
+    {
+        "title": "PD-L1 Expression in Lung Cancer.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27117833/",
+        "category": "Clinical Trial",
+        "summary": "Immunotherapies targeted against programmed death ligand 1 (PD-L1) have improved survival in a subset of patients with advanced lung cancer. PD-L 1 protein expression has emerged as a biomarker that predicts which patients are more likely to respond to immunotherapy. Herein, we describe the challenges remaining to harmonize PD- L1 detection and interpretation for best patient care.",
+        "highlighted_summary": "<mark class='tag diagnostic_procedure' title='Diagnostic_procedure'>Immunotherapies</mark> targeted against <mark class='tag diagnostic_procedure' title='Diagnostic_procedure'>programmed death ligand 1</mark> (<mark class='tag diagnostic_procedure' title='Diagnostic_procedure'>PD</mark>-L1) have <mark class='tag lab_value' title='Lab_value'>improved</mark> survival in a subset of patients with advanced lung cancer. <mark class='tag diagnostic_procedure' title='Diagnostic_procedure'>PD</mark>-<mark class='tag diagnostic_procedure' title='Diagnostic_procedure'>L</mark> 1 protein expression has emerged as a biomarker that predicts which patients are more likely to respond to immunotherapy. Herein, we describe the challenges remaining to harmonize <mark class='tag diagnostic_procedure' title='Diagnostic_procedure'>PD</mark>- L1 detection and interpretation for best patient care.",
+        "rouge_scores": {
+            "rouge-1": 0.6666666666666666,
+            "rouge-2": 0.5588235294117647,
+            "rouge-L": 0.6521739130434783
+        }
+    }
+]

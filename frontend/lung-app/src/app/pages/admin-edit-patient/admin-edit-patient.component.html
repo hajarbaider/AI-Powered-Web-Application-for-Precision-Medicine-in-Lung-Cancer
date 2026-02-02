@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* CSS inserted below */
+  </style>
+</head>
+<body>
+  <div class="sidebar" [class.hidden]="isSidebarHidden">
+
+     <div class="logo-container">
+    <img src="images/logo app.png" alt="LungApp Logo" class="logo-img" />
+  </div>
+    <ul>
+  <li (click)="navigateToDashboard()" [class.active]="isActive('/admin-dashboard')" style="cursor:pointer;">
+  <i class="fas fa-chart-line"></i>
+  <span class="label">Dashboard</span>
+</li>
+
+
+
+<li (click)="navigateToProfile()" [class.active]="isActive('/admin/profile')" style="cursor: pointer;">
+  <i class="fas fa-user"></i>
+  <span class="label">My Profile</span>
+</li>
+
+
+  <li (click)="navigateToPatients()" [class.active]="isActive('/admin-patient-manager')" style="cursor: pointer;">
+  <i class="fas fa-procedures"></i>
+  <span class="label">Patient Management</span>
+</li>
+    <li (click)="navigateToDoctors()" [class.active]="isActive('/admin-doctor-management')" style="cursor: pointer;">
+  <i class="fas fa-user-md"></i>
+  <span class="label">Doctor Management</span>
+  <li (click)="logout()">
+  <i class="fas fa-sign-out-alt"></i>
+  <span class="label">Sign Out</span>
+</li>
+
+</ul>
+
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <div class="toggle-btn" (click)="toggleSidebar()">☰</div>
+      <!-- LOGO -->
+  
+    
+      <div class="admin-info">
+  <img
+    *ngIf="user?.profileImage"
+    [src]="user.profileImage"
+    alt="Profile Image"
+    class="profile-img"
+  />
+  <span class="admin-name"> Admin: {{ user.firstName }} {{ user.lastName }}</span>
+</div>
+</div>
+<div class="content">
+  
+
+  <form class="form-container"  #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <!-- Informations Générales -->
+    <fieldset class="form-section">
+      <legend>General information</legend>
+      <div class="form-row">
+        
+        <input type="text" placeholder="Prénom" name="firstName"   [(ngModel)]="formData.firstName" />
+        
+        <input type="text" placeholder="Nom" name="lastName" [(ngModel)]="formData.lastName" />
+        <input type="email" placeholder="Email" name="email" [(ngModel)]="formData.email" />
+        <input type="password" placeholder="Mot de passe" name="password" [(ngModel)]="formData.password" />
+        <input type="text" placeholder="Téléphone"  name="phoneNumber" [(ngModel)]="formData.phoneNumber" />
+        <input type="text" placeholder="Ville"  name="city" [(ngModel)]="formData.city" />
+        <input type="text" placeholder="Adresse"  name="address" [(ngModel)]="formData.address" />
+        <div class="form-row">
+       <label for="profileImage">Import a profile image:</label>
+       <input type="file" id="profileImage" (change)="onFileSelected($event)" />
+
+     </div>
+      </div>
+      <div class="form-row">
+  <label for="doctorSelect">Doctor in charge:</label>
+  <select id="doctorSelect" name="doctor_id" required [(ngModel)]="formData.doctor_id">
+  <option value="" disabled selected>Select a doctor</option>
+  <option *ngFor="let doctor of doctors" [value]="doctor.id">
+    {{ doctor.firstName }} {{ doctor.lastName }}
+  </option>
+</select>
+
+</div>
+</fieldset>
+
+    <!-- Diagnosed Cancer -->
+    <fieldset class="form-section">
+      <legend>Cancer diagnosis</legend>
+      <div class="form-row">
+  <label>Does the patient have confirmed cancer?</label><br />
+  
+  <input
+    type="radio"
+    name="diagnosed"
+    [value]="1"
+    [(ngModel)]="formData.diagnosed"
+/> Yes
+
+  <input
+    type="radio"
+    name="diagnosed"
+    [value]="0"
+    [(ngModel)]="formData.diagnosed"
+/> No
+</div>
+</fieldset>
+
+    <!-- Données Cliniques -->
+    <fieldset class="form-section">
+      <legend>Demographics</legend>
+      <!-- Démographie -->
+      <div class="form-row"><input type="number" name="age" [(ngModel)]="formData.age" placeholder="Âge" />
+
+<select name="gender" [(ngModel)]="formData.gender">
+  <option value="" disabled selected>Genre</option>
+  <option [ngValue]="1">Male</option>
+  <option [ngValue]="2">Female</option>
+</select>
+
+<select name="race" [(ngModel)]="formData.race" >
+  <option value="" disabled selected>Race</option>
+  <option [ngValue]="1">White</option>
+  <option [ngValue]="2">Black or African-American</option>
+  <option [ngValue]="3">Asian</option>
+  <option [ngValue]="4">American Indian or Alaskan Native</option>
+  <option [ngValue]="5">Native Hawaiian or Other Pacific Islander</option>
+  <option [ngValue]="6">More than one race</option>
+  <option [ngValue]="-1">autre</option>
+</select>
+
+<input type="number" name="height" [(ngModel)]="formData.height" placeholder="Taille (inches)" />
+<input type="number" name="weight" [(ngModel)]="formData.weight" placeholder="Poids (pounds)" />
+
+      </div>
+  </fieldset>
+  <fieldset class="form-section">
+      <legend>lung cancer</legend>
+      <!-- Cancer -->
+      <div class="form-row" [class.disabled]="!isDiagnosed">
+        <!-- Taille de la lésion -->
+<input
+  type="number"
+  name="lesionsize"
+  [(ngModel)]="formData.lesionsize"
+  placeholder="Taille de la lésion (mm)"
+ [disabled]="formData.diagnosed != 1"
+      [required]="formData.diagnosed == 1"
+/>
+
+<!-- Stade AJCC 6 -->
+<select
+  id="de_stag"
+  name="de_stag"
+  required
+  [(ngModel)]="formData.de_stag"
+  [disabled]="formData.diagnosed != 1"
+      [required]="formData.diagnosed == 1"
+>
+  <option [ngValue]="null" disabled selected>Stade (AJCC 6)</option>
+  <option [ngValue]="110">Stage IA</option>
+  <option [ngValue]="120">Stage IB</option>
+  <option [ngValue]="210">Stage IIA</option>
+  <option [ngValue]="220">Stage IIB</option>
+  <option [ngValue]="310">Stage IIIA</option>
+  <option [ngValue]="320">Stage IIIB</option>
+  <option [ngValue]="400">Stage IV</option>
+  <option [ngValue]="-1">Autre</option>
+</select>
+
+<!-- Stade AJCC 7 -->
+<select
+  name="de_stag_7thed"
+  id="de_stag_7thed"
+  required
+  [(ngModel)]="formData.de_stag_7thed"
+[disabled]="formData.diagnosed != 1"
+      [required]="formData.diagnosed == 1"
+>
+  <option [ngValue]="null" disabled selected>Stade (AJCC 7e)</option>
+  <option [ngValue]="110">Stage IA</option>
+  <option [ngValue]="120">Stage IB</option>
+  <option [ngValue]="210">Stage IIA</option>
+  <option [ngValue]="220">Stage IIB</option>
+  <option [ngValue]="310">Stage IIIA</option>
+  <option [ngValue]="320">Stage IIIB</option>
+  <option [ngValue]="400">Stage IV</option>
+  <option [ngValue]="-1">Autre</option>
+</select>
+
+<!-- Type histologique -->
+<select
+  name="histology_cat"
+  id="histology_cat"
+  required
+  [(ngModel)]="formData.histology_cat"
+[disabled]="formData.diagnosed != 1"
+      [required]="formData.diagnosed == 1"
+>
+  <option value="" disabled selected>Type histologique</option>
+  <option [ngValue]="1">Small cell carcinoma</option>
+  <option [ngValue]="2">Squamous cell carcinoma</option>
+  <option [ngValue]="3">Adenocarcinoma</option>
+  <option [ngValue]="4">Bronchiolo-alveolar carcinoma</option>
+  <option [ngValue]="5">Large cell carcinoma</option>
+  <option [ngValue]="6">Adenosquamous carcinoma</option>
+  <option [ngValue]="7">Pleomorphic/sarcomatoid</option>
+  <option [ngValue]="8">Carcinoid tumor</option>
+  <option [ngValue]="-1">Autre</option>
+</select>
+
+<!-- Traitement -->
+<select
+  name="treatlc"
+  id="treatlc"
+  required
+  [(ngModel)]="formData.treatlc"
+  [disabled]="formData.diagnosed != 1"
+      [required]="formData.diagnosed == 1"
+>
+  <option value="" disabled selected>RADIATION_THERAPY</option>
+  <option value="1">Confirmed treatment</option>
+  <option value="2">Confirmed no treatment</option>
+  <option value="-1">Autre</option>
+</select>
+
+<!-- Cancer confirmé -->
+<select
+  name="lung_cancer"
+  id="lung_cancer"
+  required
+  [(ngModel)]="formData.lung_cancer"
+  [disabled]="formData.diagnosed != 1"
+      [required]="formData.diagnosed == 1"
+>
+  <option value="" disabled selected>Cancer Confirmé ?</option>
+  <option [ngValue]="1">Oui</option>
+  <option [ngValue]="0">Non</option>
+</select>
+
+
+<select
+  name="RADIATION_THERAPY"
+  id="RADIATION_THERAPY"
+  required
+  [(ngModel)]="formData.RADIATION_THERAPY"
+  [disabled]="formData.diagnosed != 1"
+      [required]="formData.diagnosed == 1"
+
+>
+  <option value="" disabled selected>RADIATION_THERAPY</option>
+  <option value="0">NON </option>
+  <option value="1">Oui</option>
+</select>
+
+</div>
+</fieldset>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<fieldset class="form-section">
+      <legend>Genetic information</legend>
+    
+      <!-- Informations Génétiques -->
+<div class="form-row">
+  <select name="EGFR_cna"  [(ngModel)]="formData.EGFR_cna"  [disabled]="formData.diagnosed != 1" >
+    <option value="" disabled selected>EGFR</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+ <select name="ALK_cna"  [(ngModel)]="formData.ALK_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>ALK</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+     <select name="ROS1_cna"  [(ngModel)]="formData.ROS1_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>ROS1</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+
+     <select name="BRAF_cna" [(ngModel)]="formData.BRAF_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>BRAF</option>
+    <option [value]="-2">-Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+
+     <select name="MET_cna" [(ngModel)]="formData.MET_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>MET</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+    <select name="RET_cna"  [(ngModel)]="formData.RET_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>RET</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+
+    <select name="ERBB2_cna" [(ngModel)]="formData.ERBB2_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>ERBB2</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+     <select name="KRAS_cna"  [(ngModel)]="formData.KRAS_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>KRAS</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+
+     <select name="TP53_cna"  [(ngModel)]="formData.TP53_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>TP53</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+
+    <select name="STK11_cna"  [(ngModel)]="formData.STK11_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>STK11_cna</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+    <select name="KEAP1_cna" [(ngModel)]="formData.KEAP1_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>KEAP1</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+    <select name="PIK3CA_cna"  [(ngModel)]="formData.PIK3CA_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>PIK3CA</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+     <select name="NRAS_cna"  [(ngModel)]="formData.NRAS_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>NRAS_cna</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+<select name="NTRK1_cna"  [(ngModel)]="formData.NTRK1_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>NTRK1</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+
+    <select name="NTRK2_cna"  [(ngModel)]="formData.NTRK2_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>NTRK2</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+
+     <select name="NTRK3_cna"  [(ngModel)]="formData.NTRK3_cna"  [disabled]="formData.diagnosed != 1">
+    <option value="" disabled selected>NTRK3</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+
+    <select name="CD274_cna"  [(ngModel)]="formData.CD274_cna"  [disabled]="formData.diagnosed != 1"
+      [required]="formData.diagnosed == 1">
+    <option value="" disabled selected>CD274</option>
+    <option [value]="-2">Large Deletion</option>
+      <option [value]="-1">Single Copy Loss</option>
+      <option [value]="0">Normal Copy</option>
+      <option [value]="1">Low Gain</option>
+      <option [value]="2">High Gain</option>
+    </select>
+
+
+</div>
+</fieldset>
+
+<fieldset class="form-section">
+  <legend>Hypoxia scores</legend>
+  <div class="form-row">
+    <input
+      type="number"
+      name="RAGNUM_HYPOXIA_SCORE"
+      placeholder="RAGNUM_HYPOXIA_SCORE"
+      [(ngModel)]="formData.RAGNUM_HYPOXIA_SCORE"
+      [disabled]="formData.diagnosed != 1"
+ 
+
+    />
+
+    <input
+      type="number"
+      name="BUFFA_HYPOXIA_SCORE"
+      placeholder="BUFFA_HYPOXIA_SCORE"
+      [(ngModel)]="formData.BUFFA_HYPOXIA_SCORE"
+      [disabled]="formData.diagnosed != 1"
+  
+    />
+  </div>
+</fieldset>
+
+<fieldset class="form-section">
+  <legend>Ancestry Scores</legend>
+  <div class="form-row">
+    <input
+      type="number"
+      name="EUR"
+      [(ngModel)]="formData.EUR"
+      placeholder="Score EUR"
+      step="0.01"
+      min="0"
+    />
+    
+    <input
+      type="number"
+      name="AFR"
+      [(ngModel)]="formData.AFR"
+      placeholder="Score AFR"
+      step="0.01"
+      min="0"
+    />
+
+    <input
+      type="number"
+      name="EAS"
+      [(ngModel)]="formData.EAS"
+      placeholder="Score EAS"
+      step="0.01"
+      min="0"
+    />
+
+    <input
+      type="number"
+      name="AMR"
+      [(ngModel)]="formData.AMR"
+      placeholder="Score AMR"
+      step="0.01"
+      min="0"
+    />
+
+    <input
+      type="number"
+      name="SAS"
+      [(ngModel)]="formData.SAS"
+      placeholder="Score SAS"
+      step="0.01"
+      min="0"
+    />
+  </div>
+</fieldset>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <fieldset class="form-section">
+      <legend>Medical history</legend>
+      <!-- Antécédents Médicaux -->
+      <!-- Antécédents Médicaux -->
+<div class="form-row">
+  <select name="diagadas" required [(ngModel)]="formData.diagadas">
+    <option value="" disabled selected>Asthme (adulte)</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagasbe" required [(ngModel)]="formData.diagasbe">
+    <option value="" disabled selected>Asbestose</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagbron" required [(ngModel)]="formData.diagbron">
+    <option value="" disabled selected>Bronchectasie</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagchas" required [(ngModel)]="formData.diagchas">
+    <option value="" disabled selected>Asthme (enfance)</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagchro" required [(ngModel)]="formData.diagchro">
+    <option value="" disabled selected>Bronchite chronique</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagcopd" required [(ngModel)]="formData.diagcopd">
+    <option value="" disabled selected>COPD</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagdiab" required [(ngModel)]="formData.diagdiab">
+    <option value="" disabled selected>Diabète</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagemph" required [(ngModel)]="formData.diagemph">
+    <option value="" disabled selected>Emphysème</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagfibr" required [(ngModel)]="formData.diagfibr">
+    <option value="" disabled selected>Fibrose pulmonaire</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diaghear" required [(ngModel)]="formData.diaghear">
+    <option value="" disabled selected>Maladie cardiaque</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diaghype" required [(ngModel)]="formData.diaghype">
+    <option value="" disabled selected>Hypertension</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagpneu" required [(ngModel)]="formData.diagpneu">
+    <option value="" disabled selected>Pneumonie</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagsarc" required [(ngModel)]="formData.diagsarc">
+    <option value="" disabled selected>Sarcoïdose</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagsili" required [(ngModel)]="formData.diagsili">
+    <option value="" disabled selected>Silicose</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagstro" required [(ngModel)]="formData.diagstro">
+    <option value="" disabled selected>AVC</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="diagtube" required [(ngModel)]="formData.diagtube">
+    <option value="" disabled selected>Tuberculose</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+
+  <select name="canclung" required [(ngModel)]="formData.canclung">
+    <option value="" disabled selected>Cancer du poumon (antérieur)</option>
+    <option [ngValue]="1">Oui</option>
+    <option [ngValue]="0">Non</option>
+  </select>
+</div>
+
+</fieldset>
+      <!-- Tabagisme -->
+       <fieldset class="form-section">
+      <legend>Smoking</legend>
+      <!-- Tabagisme -->
+<div class="form-row">
+  <select name="cigsmok" id="cigsmok" required [(ngModel)]="formData.cigsmok">
+    <option value="" disabled selected>Smoking status</option>
+    <option [ngValue]="0">Former smoker</option>
+    <option [ngValue]="1">Current smoker</option>
+    <option [ngValue]="-1">Other</option>
+  </select>
+
+  <input type="number" name="age_quit" id="age_quit" placeholder="Âge d'arrêt" min="0"
+         [(ngModel)]="formData.age_quit" />
+
+  <input type="number" name="pkyr" id="pkyr" placeholder="Pack years" step="0.01" min="0"
+         [(ngModel)]="formData.pkyr" />
+
+  <input type="number" name="smokeyr" id="smokeyr" placeholder="Années de tabagisme" min="0"
+         [(ngModel)]="formData.smokeyr" />
+
+  <input type="number" name="smokeday" id="smokeday" placeholder="Cigarettes par jour" min="0"
+         [(ngModel)]="formData.smokeday" />
+</div>
+
+      </fieldset>
+      <!-- Progression Cancer -->
+     <fieldset class="form-section">
+  <legend>Cancer progression</legend>
+  <div class="form-row">
+   <select
+  name="progressed_ever"
+  id="progressed_ever"
+  required
+  [(ngModel)]="formData.progressed_ever"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+>
+  <option value="" disabled selected>Cancer progression</option>
+  <option value="0">No progress</option>
+  <option value="1">Confirmed progress</option>
+  <option value="-1">Other</option>
+</select>
+
+
+
+
+        <input type="number" name="prog_days_1st" id="prog_days_1st" placeholder="Jours avant 1ère progression" min="0"  [(ngModel)]="formData.prog_days_1st"   [disabled]="formData.diagnosed != 1"
+      [required]="formData.diagnosed == 1"
+/>
+
+      </div>
+      </fieldset>
+      <!-- Survie -->
+<fieldset class="form-section">
+  <legend>Survival</legend>
+  <div class="form-row" [class.disabled]="!isDiagnosed">
+    <input
+      type="number"
+      name="candx_days"
+      placeholder="Jours jusqu'au diagnostic"
+     [class.disabled]="!isDiagnosed"
+      [(ngModel)]="formData.candx_days"
+    />
+
+    <input
+      type="number"
+      name="canc_free_days"
+      placeholder="Jours sans cancer"
+     
+      [(ngModel)]="formData.canc_free_days"
+      [disabled]="formData.diagnosed != 1"
+      [required]="formData.diagnosed == 1"
+    />
+  </div>
+</fieldset>
+
+
+    <!-- Données CT Scan -->
+<fieldset class="form-section">
+  <legend>CT Scan data</legend>
+  <div class="form-row">
+    <!-- file input: خاصو event خاص -->
+    <input
+      type="file"
+      name="ct_scan_image"
+      accept=".png,.jpg,.jpeg,.dcm"
+      (change)="onFileSelected($event)"
+    />
+
+    <!-- scan date -->
+    <input
+      type="date"
+      name="scan_date"
+      [(ngModel)]="formData.scan_date"
+    />
+  </div>
+</fieldset>
+
+
+    <!-- Traitement -->
+
+
+
+      <button type="submit" class="btn btn-add">
+        <i class="fas fa-save"></i> Save changes
+      </button>
+    </form>
+  </div> 
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p>&copy; 2025 Pulmo Precision AI. All rights reserved.</p>
+    </div>
+  </div>
+
+
+
+
+</body>
+</html>

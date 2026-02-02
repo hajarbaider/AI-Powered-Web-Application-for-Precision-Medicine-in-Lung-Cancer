@@ -1,14 +1,14 @@
-# Virtual environments
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 venv/
 backend/venv/
 
-# Python cache
-__pycache__/
-*.pyc
+# Node
+node_modules/
+frontend/lung-app/node_modules/
 
-# System files
-.DS_Store
-Thumbs.db
-
-# Jupyter
-.ipynb_checkpoints/
+# IDE
+.vscode/

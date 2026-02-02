@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* CSS styles here */
+  </style>
+</head>
+<body>
+  <div class="sidebar" [class.hidden]="isSidebarHidden">
+
+    <div class="logo-container">
+      <img src="images/logo app.png" alt="LungApp Logo" class="logo-img" />
+    </div>
+
+    <ul>
+      <li (click)="navigateToDashboard()" [class.active]="isActive('/admin-dashboard')" style="cursor:pointer;">
+        <i class="fas fa-chart-line"></i>
+        <span class="label">Dashboard</span>
+      </li>
+
+      <li (click)="navigateToProfile()" [class.active]="isActive('/admin/profile')" style="cursor: pointer;">
+        <i class="fas fa-user"></i>
+        <span class="label">My Profile</span>
+      </li>
+
+      <li (click)="navigateToPatients()" [class.active]="isActive('/admin-patient-manager')" style="cursor: pointer;">
+        <i class="fas fa-procedures"></i>
+        <span class="label">Patient List</span>
+      </li>
+
+      <li (click)="navigateToPredectionLungCancer()" [class.active]="isActive('/lung-cancer-prediction')" style="cursor: pointer;">
+        <i class="fas fa-lungs"></i>
+        <span class="label">Lung Cancer Prediction</span>
+      </li>
+
+      <li (click)="navigateToPredectionSurvival()" [class.active]="isActive('/admin-patient-manager')" style="cursor: pointer;">
+        <i class="fas fa-heartbeat"></i>
+        <span class="label">Survival Prediction</span>
+      </li>
+
+      <li (click)="navigateToRecomandationTreatement()" [class.active]="isActive('/admin-patient-manager')" style="cursor: pointer;">
+        <i class="fas fa-pills"></i>
+        <span class="label">Treatment Recommendation</span>
+      </li>
+
+       <li (click)="navigateToPubmedArticles()" [class.active]="isActive('/admin-patient-manager')" style="cursor: pointer;">
+  <i class="fas fa-lightbulb"></i>
+  <span class="label">New discovery</span>
+</li>
+
+      <li (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span class="label">Sign Out</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <div class="toggle-btn" (click)="toggleSidebar()">☰</div>
+      <!-- LOGO -->
+
+      
+      <div class="admin-info">
+        <img
+          *ngIf="user?.profileImage"
+          [src]="user.profileImage"
+          alt="Profile Image"
+          class="profile-img"
+        />
+        <span class="admin-name">Doctor: {{ user.firstName }} {{ user.lastName }}</span>
+      </div>
+    </div>
+
+    <div class="orders">
+      <!-- Title + Add Button -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h2 style="color: #0b1c36;">Patient List</h2>
+      </div>
+
+      <!-- Search bar, limit, export buttons -->
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+        <input
+          type="text"
+          placeholder="🔍 Search..."
+          class="search-input"
+          [(ngModel)]="searchTerm"
+        />
+        <input
+          type="number"
+          min="1"
+          [(ngModel)]="limit"
+          placeholder="Show N rows"
+          class="limit-input"
+        />
+        <button class="btn btn-export" (click)="exportCSV()">
+          <i class="fas fa-file-csv"></i> Export CSV
+        </button>
+        <button class="btn btn-export" (click)="exportPDF()">
+          <i class="fas fa-file-pdf"></i> Export PDF
+        </button>
+      </div>
+
+      <!-- Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>City</th>
+            <th>Responsible Doctor</th>
+            <th>Lung Cancer Prediction</th>
+            <th>Treatment Recommendation</th>
+            <th>Survival Prediction</th>
+            <th>Medical Folder</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let patient of filteredPatients()">
+            <td>{{ patient.id }}</td>
+            <td>
+              <!-- Thumbnail -->
+              <img
+                [src]="patient.profileImage"
+                class="profile-img"
+                width="40"
+                height="40"
+                (click)="openImageModal(patient.profileImage)"
+                style="cursor: pointer;"
+              />
+              <!-- Modal -->
+              <div class="image-modal" *ngIf="showModal" (click)="closeImageModal()">
+                <img [src]="selectedImage" class="full-image" />
+              </div>
+            </td>
+            <td>{{ patient.firstName }} {{ patient.lastName }}</td>
+            <td>{{ patient.email }}</td>
+            <td>{{ patient.phoneNumber }}</td>
+            <td>{{ patient.city }}</td>
+            <td>{{ patient.doctor || 'Not assigned' }}</td>
+
+            <td>
+              <span *ngIf="patient.has_lung_cancer_prediction" style="color: green;">
+                <i class="fas fa-check-circle"></i>
+              </span>
+              <span *ngIf="!patient.has_lung_cancer_prediction" style="color: red;">
+                <i class="fas fa-times-circle"></i>
+              </span>
+            </td>
+
+            <td>
+              <span *ngIf="patient.has_treatment_recommendation" style="color: green;">
+                <i class="fas fa-check-circle"></i>
+              </span>
+              <span *ngIf="!patient.has_treatment_recommendation" style="color: red;">
+                <i class="fas fa-times-circle"></i>
+              </span>
+            </td>
+
+            <td>
+              <span *ngIf="patient.has_survival_prediction" style="color: green;">
+                <i class="fas fa-check-circle"></i>
+              </span>
+              <span *ngIf="!patient.has_survival_prediction" style="color: red;">
+                <i class="fas fa-times-circle"></i>
+              </span>
+            </td>
+
+            <td>
+              <button class="btn btn-view" (click)="viewMedicalFolder(patient.id)">
+                <i class="fas fa-folder-open"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p>&copy; 2025 Pulmo Precision AI. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>

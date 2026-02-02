@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* CSS inserted below */
+  </style>
+</head>
+<body>
+  <div class="sidebar" [class.hidden]="isSidebarHidden">
+     <div class="logo-container">
+    <img src="images/logo app.png" alt="LungApp Logo" class="logo-img" />
+  </div>
+    <ul>
+  <li (click)="navigateToDashboard()" [class.active]="isActive('/admin-dashboard')" style="cursor:pointer;">
+  <i class="fas fa-chart-line"></i>
+  <span class="label">Dashboard</span>
+</li>
+
+<li (click)="navigateToProfile()" [class.active]="isActive('/admin/profile')" style="cursor: pointer;">
+  <i class="fas fa-user"></i>
+  <span class="label">My Profile</span>
+</li>
+
+  <li (click)="navigateToPatients()" [class.active]="isActive('/admin-patient-manager')" style="cursor: pointer;">
+  <i class="fas fa-procedures"></i>
+  <span class="label">Patient Management</span>
+</li>
+  <li (click)="navigateToDoctors()" [class.active]="isActive('/admin-doctor-management')" style="cursor: pointer;">
+  <i class="fas fa-user-md"></i>
+  <span class="label">Doctor Management</span>
+</li>
+
+  <li (click)="logout()">
+  <i class="fas fa-sign-out-alt"></i>
+  <span class="label">Sign Out</span>
+</li>
+
+</ul>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <div class="toggle-btn" (click)="toggleSidebar()">☰</div>
+    
+      <div class="admin-info">
+  <img *ngIf="user?.profileImage" [src]="user.profileImage" alt="Profile Image" class="profile-img" />
+  <span class="admin-name"> Admin: {{ user.firstName }} {{ user.lastName }}</span>
+</div>
+</div>
+
+<div class="content">
+
+
+  <form class="form-container"  #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <h2>Add a Patient</h2>
+    <!-- Informations Générales -->
+    <fieldset class="form-section">
+      <legend>General information</legend>
+      <div class="form-row">
+        
+        <input type="text" placeholder="firstName" name="firstName"   [(ngModel)]="formData.firstName" required
+  #firstName="ngModel"
+  [ngClass]="{ 'invalid': firstName.invalid && f.submitted }"/><div class="error" *ngIf="firstName.invalid && f.submitted">
+  Please fill in this field
+</div>
+        
+        <input type="text" placeholder="lastName" name="lastName" [(ngModel)]="formData.lastName"required
+  #lastName="ngModel"
+  [ngClass]="{ 'invalid': lastName.invalid && f.submitted }"
+/>
+
+<div class="error" *ngIf="lastName.invalid && f.submitted">
+  Please fill in this field
+</div>
+
+        <input type="email" placeholder="Email" name="email" [(ngModel)]="formData.email" required
+  #email="ngModel"
+  [ngClass]="{ 'invalid': email.invalid && f.submitted }"
+/>
+
+<div class="error" *ngIf="email.invalid && f.submitted">
+  Please enter a valid email address
+</div>
+        <input type="password" placeholder="password" name="password" [(ngModel)]="formData.password" required
+  #password="ngModel"
+  [ngClass]="{ 'invalid': password.invalid && f.submitted }"
+/>
+
+<div class="error" *ngIf="password.invalid && f.submitted">
+  Please enter a password
+</div>
+        <input type="text" placeholder="phoneNumber"  name="phoneNumber" [(ngModel)]="formData.phoneNumber" required
+  #phoneNumber="ngModel"
+  [ngClass]="{ 'invalid': phoneNumber.invalid && f.submitted }"
+/>
+
+<div class="error" *ngIf="phoneNumber.invalid && f.submitted">
+  Please enter a phone number
+</div>
+        <input type="text" placeholder="city"  name="city" [(ngModel)]="formData.city" required
+  #city="ngModel"
+  [ngClass]="{ 'invalid': city.invalid && f.submitted }"
+/>
+
+<div class="error" *ngIf="city.invalid && f.submitted">
+  Please enter the city
+</div>
+        <input type="text" placeholder="address"  name="address" [(ngModel)]="formData.address" required
+  #address="ngModel"
+  [ngClass]="{ 'invalid': address.invalid && f.submitted }"
+/>
+
+<div class="error" *ngIf="address.invalid && f.submitted">
+  Please enter the address
+</div>
+       <div class="form-row">
+  <label for="profileImage">Import a profile image:</label>
+  <input
+    type="file"
+    id="profileImage"
+    name="profileImage"
+    (change)="onFileSelected($event)"
+    [ngClass]="{ 'invalid': !imageSelected && f.submitted }"
+  />
+  <div class="error" *ngIf="!imageSelected && f.submitted">
+    Please upload a profile image
+  </div>
+</div>
+
+    </div>
+
+
+ <div class="form-row">
+  <label for="doctorSelect">Supervising Doctor:</label>
+  <select
+    id="doctorSelect"
+    name="doctor_id"
+    required
+    [(ngModel)]="formData.doctor_id"
+    #doctorSelectRef="ngModel"
+    [ngClass]="{ 'invalid': doctorSelectRef.invalid && f.submitted }"
+  >
+    <option value="" disabled selected>Select a doctor</option>
+    <option *ngFor="let doctor of doctors" [value]="doctor.id">
+      {{ doctor.firstName }} {{ doctor.lastName }}
+    </option>
+  </select>
+
+  <div class="error" *ngIf="doctorSelectRef.invalid && f.submitted">
+    Please select a supervising doctor
+  </div>
+</div>
+
+</fieldset>
+
+    <!-- Diagnosed Cancer -->
+    <fieldset class="form-section">
+      <legend>Cancer Diagnosis</legend>
+      <div class="form-row" [ngClass]="{'invalid': diagnosedRef.invalid && f.submitted}">
+    <label>Has the patient been diagnosed with cancer?</label><br />
+
+    <input
+      type="radio"
+      name="diagnosed"
+      [value]="1"
+      [(ngModel)]="formData.diagnosed"
+      #diagnosedRef="ngModel"
+      required
+    /> Yes
+
+    <input
+      type="radio"
+      name="diagnosed"
+      [value]="0"
+      [(ngModel)]="formData.diagnosed"
+      required
+    /> No
+
+    <div class="error" *ngIf="diagnosedRef.invalid && f.submitted">
+      Please select an option
+    </div>
+  </div>
+</fieldset>
+
+
+
+
+    <!-- Données Cliniques -->
+    <fieldset class="form-section">
+      <legend>Demographics</legend>
+      <!-- Démographie -->
+      <div class="form-row">
+  <input 
+    type="number" 
+    name="age" 
+    [(ngModel)]="formData.age" 
+    placeholder="Age" 
+    required 
+    #age="ngModel"
+    min="0"
+  />
+  <div *ngIf="age.invalid && age.touched" style="color: red; font-size: 0.9em;">
+    Please enter your age
+  </div>
+
+
+
+<select 
+    name="gender" 
+    [(ngModel)]="formData.gender" 
+    required 
+    #gender="ngModel"
+  >
+    <option value="" disabled selected>Gender</option>
+    <option value="1">Male</option>
+    <option value="2">Female</option>
+  </select>
+  <div *ngIf="gender.invalid && gender.touched" style="color: red; font-size: 0.9em;">
+    Please select your gender
+  </div>
+
+<select
+    name="race"
+    [(ngModel)]="formData.race"
+    required
+    #race="ngModel"
+  >
+    <option value="" disabled selected>Race</option>
+    <option value="1">White</option>
+    <option value="2">Black or African-American</option>
+    <option value="3">Asian</option>
+    <option value="4">American Indian or Alaskan Native</option>
+    <option value="5">Native Hawaiian or Other Pacific Islander</option>
+    <option value="6">More than one race</option>
+    <option value="-1">Other</option>
+  </select>
+  <div *ngIf="race.invalid && race.touched" style="color: red; font-size: 0.9em;">
+    Please select your race
+  </div>
+
+
+
+
+<input
+    type="number"
+    name="height"
+    placeholder="Height"
+    [(ngModel)]="formData.height"
+    required
+    #height="ngModel"
+  />
+  <div *ngIf="height.invalid && height.touched" style="color: red; font-size: 0.9em;">
+    Please enter the patient's height
+  </div>
+
+
+<input
+    type="number"
+    name="weight"
+    placeholder="Weight"
+    [(ngModel)]="formData.weight"
+    required
+    #weight="ngModel"
+  />
+  <div *ngIf="weight.invalid && weight.touched" style="color: red; font-size: 0.9em;">
+    Please enter the patient's weight
+  </div>
+
+  </div>
+  </fieldset>
+
+
+
+  <fieldset class="form-section">
+      <legend>lung cancer</legend>
+      <!-- Cancer -->
+      <div class="form-row" [class.disabled]="diagnosed != 1">
+        <!-- Taille de la lésion -->
+<input
+    type="number"
+    name="lesionsize"
+    placeholder="Lesion size (mm)"
+    [(ngModel)]="formData.lesionsize"
+    [disabled]="formData.diagnosed != 1"
+    [required]="formData.diagnosed == 1"
+    #lesionsize="ngModel"
+  />
+  <div *ngIf="formData.diagnosed == 1 && lesionsize.invalid && lesionsize.touched" style="color: red; font-size: 0.9em;">
+    Please enter the lesion size
+  </div>
+
+
+<!-- Stade AJCC 6 -->
+ <select
+    id="de_stag"
+    name="de_stag"
+    [(ngModel)]="formData.de_stag"
+    [disabled]="formData.diagnosed != 1"
+    [required]="formData.diagnosed == 1"
+    #deStag="ngModel"
+  >
+    <option value="" disabled selected>Stade (AJCC 6)</option>
+    <option value="110">Stage IA</option>
+    <option value="120">Stage IB</option>
+    <option value="210">Stage IIA</option>
+    <option value="220">Stage IIB</option>
+    <option value="310">Stage IIIA</option>
+    <option value="320">Stage IIIB</option>
+    <option value="400">Stage IV</option>
+    <option value="-1">Autre</option>
+  </select>
+
+  <div *ngIf="formData.diagnosed == 1 && deStag.invalid && deStag.touched" style="color: red; font-size: 0.9em;">
+    Please select the AJCC 6 stage
+  </div>
+
+<!-- Stade AJCC 7 -->
+<select
+    name="de_stag_7thed"
+    id="de_stag_7thed"
+    [(ngModel)]="formData.de_stag_7thed"
+    [disabled]="formData.diagnosed != 1"
+    [required]="formData.diagnosed == 1"
+    #deStag7="ngModel"
+  >
+    <option value="" disabled selected>Stade (AJCC 7e)</option>
+    <option value="110">Stage IA</option>
+    <option value="120">Stage IB</option>
+    <option value="210">Stage IIA</option>
+    <option value="220">Stage IIB</option>
+    <option value="310">Stage IIIA</option>
+    <option value="320">Stage IIIB</option>
+    <option value="400">Stage IV</option>
+    <option value="-1">Autre</option>
+  </select>
+
+  <div *ngIf="formData.diagnosed == 1 && deStag7.invalid && deStag7.touched" style="color: red; font-size: 0.9em;">
+    Please select the AJCC 7 stage
+  </div>
+
+
+
+
+<!-- Type histologique -->
+<select
+    name="histology_cat"
+    id="histology_cat"
+    [(ngModel)]="formData.histology_cat"
+    [disabled]="formData.diagnosed != 1"
+    [required]="formData.diagnosed == 1"
+    #histologyCat="ngModel"
+  >
+    <option value="" disabled selected>Histological type</option>
+    <option value="1">Small cell carcinoma</option>
+    <option value="2">Squamous cell carcinoma</option>
+    <option value="3">Adenocarcinoma</option>
+    <option value="4">Bronchiolo-alveolar carcinoma</option>
+    <option value="5">Large cell carcinoma</option>
+    <option value="6">Adenosquamous carcinoma</option>
+    <option value="7">Pleomorphic/sarcomatoid</option>
+    <option value="8">Carcinoid tumor</option>
+    <option value="-1">Autre</option>
+  </select>
+
+  <div *ngIf="formData.diagnosed == 1 && histologyCat.invalid && histologyCat.touched" style="color: red; font-size: 0.9em;">
+    Please select the histological type
+  </div>
+
+
+
+
+
+<!-- Traitement -->
+<select
+    name="treatlc"
+    id="treatlc"
+    [(ngModel)]="formData.treatlc"
+    [disabled]="formData.diagnosed != 1"
+    [required]="formData.diagnosed == 1"
+    #treatlc="ngModel"
+  >
+    <option value="" disabled selected>Traitement</option>
+    <option value="1">Confirmed treatment</option>
+    <option value="2">Confirmed no treatment</option>
+  </select>
+
+  <div *ngIf="formData.diagnosed == 1 && treatlc.invalid && treatlc.touched" style="color: red; font-size: 0.9em;">
+    Please select the treatment
+  </div>
+
+
+
+
+<!-- Cancer confirmé -->
+<select
+  name="lung_cancer"
+  id="lung_cancer"
+  [(ngModel)]="formData.lung_cancer"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #lungCancer="ngModel"
+>
+  <option value="" disabled selected>Cancer confirmed?</option>
+  <option value="1">Yes</option>
+  <option value="0">No</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && lungCancer.invalid && lungCancer.touched" style="color: red; font-size: 0.9em;">
+  Please confirm cancer status
+</div>
+
+
+
+
+<select
+  name="RADIATION_THERAPY"
+  id="RADIATION_THERAPY"
+  [(ngModel)]="formData.RADIATION_THERAPY"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #radiationTherapy="ngModel"
+>
+  <option value="" disabled selected>Radiation Therapy</option>
+  <option value="0">NO</option>
+  <option value="1">Yes</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && radiationTherapy.invalid && radiationTherapy.touched" style="color: red; font-size: 0.9em;">
+  Please select radiation therapy status
+</div>
+
+
+</div>
+</fieldset>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<fieldset class="form-section">
+      <legend>Genetic Information</legend>
+    
+      <!-- Informations Génétiques -->
+<div class="form-row">
+ <select
+  name="EGFR_cna"
+  [(ngModel)]="formData.EGFR_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #egfrCna="ngModel"
+>
+  <option value="" disabled selected>EGFR</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && egfrCna.invalid && egfrCna.touched" style="color: red; font-size: 0.9em;">
+  Please select the EGFR CNA status.
+</div>
+
+
+<select
+  name="ALK_cna"
+  [(ngModel)]="formData.ALK_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #alkCna="ngModel"
+>
+  <option value="" disabled selected>ALK</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && alkCna.invalid && alkCna.touched" style="color: red; font-size: 0.9em;">
+  Please select the ALK CNA status.
+</div>
+
+
+     <select
+  name="ROS1_cna"
+  [(ngModel)]="formData.ROS1_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #ros1Cna="ngModel"
+>
+  <option value="" disabled selected>ROS1</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && ros1Cna.invalid && ros1Cna.touched" style="color: red; font-size: 0.9em;">
+  Please select the ROS1 CNA status.
+</div>
+
+
+
+     <select
+  name="BRAF_cna"
+  [(ngModel)]="formData.BRAF_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #brafCna="ngModel"
+>
+  <option value="" disabled selected>BRAF</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && brafCna.invalid && brafCna.touched" style="color: red; font-size: 0.9em;">
+  Please select the BRAF CNA status.
+</div>
+
+
+
+     <select
+  name="MET_cna"
+  [(ngModel)]="formData.MET_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #metCna="ngModel"
+>
+  <option value="" disabled selected>MET</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && metCna.invalid && metCna.touched" style="color: red; font-size: 0.9em;">
+  Please select the MET CNA status.
+</div>
+
+
+    <select
+  name="RET_cna"
+  [(ngModel)]="formData.RET_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #retCna="ngModel"
+>
+  <option value="" disabled selected>RET</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && retCna.invalid && retCna.touched" style="color: red; font-size: 0.9em;">
+  Please select the RET CNA status.
+</div>
+
+
+
+   <select
+  name="ERBB2_cna"
+  [(ngModel)]="formData.ERBB2_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #erbb2Cna="ngModel"
+>
+  <option value="" disabled selected>ERBB2</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && erbb2Cna.invalid && erbb2Cna.touched" style="color: red; font-size: 0.9em;">
+  Please select the ERBB2 CNA status.
+</div>
+
+
+     <select
+  name="KRAS_cna"
+  [(ngModel)]="formData.KRAS_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #krasCna="ngModel"
+>
+  <option value="" disabled selected>KRAS</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && krasCna.invalid && krasCna.touched" style="color: red; font-size: 0.9em;">
+  Please select the KRAS CNA status.
+</div>
+
+
+
+     <select
+  name="TP53_cna"
+  [(ngModel)]="formData.TP53_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #tp53Cna="ngModel"
+>
+  <option value="" disabled selected>TP53</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && tp53Cna.invalid && tp53Cna.touched" style="color: red; font-size: 0.9em;">
+  Please select the TP53 CNA status.
+</div>
+
+
+
+   <select
+  name="STK11_cna"
+  [(ngModel)]="formData.STK11_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #stk11Cna="ngModel"
+>
+  <option value="" disabled selected>STK11 CNA</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && stk11Cna.invalid && stk11Cna.touched" style="color: red; font-size: 0.9em;">
+  Please select the STK11 CNA status.
+</div>
+
+
+
+    <select
+  name="KEAP1_cna"
+  [(ngModel)]="formData.KEAP1_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #keap1Cna="ngModel"
+>
+  <option value="" disabled selected>KEAP1</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && keap1Cna.invalid && keap1Cna.touched" style="color: red; font-size: 0.9em;">
+  Please select the KEAP1 CNA status.
+</div>
+
+
+
+
+    <select
+  name="PIK3CA_cna"
+  [(ngModel)]="formData.PIK3CA_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #pik3caCna="ngModel"
+>
+  <option value="" disabled selected>PIK3CA</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && pik3caCna.invalid && pik3caCna.touched" style="color: red; font-size: 0.9em;">
+  Please select the PIK3CA CNA status.
+</div>
+
+
+
+
+
+     <select
+  name="NRAS_cna"
+  [(ngModel)]="formData.NRAS_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #nrasCna="ngModel"
+>
+  <option value="" disabled selected>NRAS CNA</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && nrasCna.invalid && nrasCna.touched" style="color: red; font-size: 0.9em;">
+  Please select the NRAS CNA status.
+</div>
+
+
+
+
+
+<select
+  name="NTRK1_cna"
+  [(ngModel)]="formData.NTRK1_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #ntrk1Cna="ngModel"
+>
+  <option value="" disabled selected>NTRK1</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && ntrk1Cna.invalid && ntrk1Cna.touched" style="color: red; font-size: 0.9em;">
+  Please select the NTRK1 CNA status.
+</div>
+
+
+
+    <select
+  name="NTRK2_cna"
+  [(ngModel)]="formData.NTRK2_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #ntrk2Cna="ngModel"
+>
+  <option value="" disabled selected>NTRK2</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && ntrk2Cna.invalid && ntrk2Cna.touched" style="color: red; font-size: 0.9em;">
+  Please select the NTRK2 CNA status.
+</div>
+
+
+
+    <select
+  name="NTRK3_cna"
+  [(ngModel)]="formData.NTRK3_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #ntrk3Cna="ngModel"
+>
+  <option value="" disabled selected>NTRK3</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && ntrk3Cna.invalid && ntrk3Cna.touched" style="color: red; font-size: 0.9em;">
+  Please select the NTRK3 CNA status.
+</div>
+
+
+
+   <select
+  name="CD274_cna"
+  [(ngModel)]="formData.CD274_cna"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #cd274Cna="ngModel"
+>
+  <option value="" disabled selected>CD274</option>
+  <option [value]="-2">Large Deletion</option>
+  <option [value]="-1">Single Copy Loss</option>
+  <option [value]="0">Normal Copy</option>
+  <option [value]="1">Low Gain</option>
+  <option [value]="2">High Gain</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && cd274Cna.invalid && cd274Cna.touched" style="color: red; font-size: 0.9em;">
+  Please select the CD274 CNA status.
+</div>
+
+
+
+</div>
+</fieldset>
+
+<fieldset class="form-section">
+  <legend>Hypoxia Scores</legend>
+  <div class="form-row">
+
+
+   <input
+  type="number"
+  name="RAGNUM_HYPOXIA_SCORE"
+  placeholder="RAGNUM Hypoxia Score"
+  [(ngModel)]="formData.RAGNUM_HYPOXIA_SCORE"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #ragnumHypoxiaScore="ngModel"
+/>
+
+<div *ngIf="formData.diagnosed == 1 && ragnumHypoxiaScore.invalid && ragnumHypoxiaScore.touched" style="color: red; font-size: 0.9em;">
+  Please enter the RAGNUM Hypoxia Score.
+</div>
+
+
+    <input
+  type="number"
+  name="BUFFA_HYPOXIA_SCORE"
+  placeholder="Buffa Hypoxia Score"
+  [(ngModel)]="formData.BUFFA_HYPOXIA_SCORE"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #buffaHypoxiaScore="ngModel"
+/>
+
+<div *ngIf="formData.diagnosed == 1 && buffaHypoxiaScore.invalid && buffaHypoxiaScore.touched" style="color: red; font-size: 0.9em;">
+  Please enter the Buffa Hypoxia Score.
+</div>
+
+
+  </div>
+</fieldset>
+
+
+
+
+<fieldset class="form-section">
+  <legend>Ancestry Scores</legend>
+  <div class="form-row">
+
+    <input
+  type="number"
+  name="EUR"
+  [(ngModel)]="formData.EUR"
+  placeholder="Score EUR"
+  step="0.01"
+  min="0"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #eurScore="ngModel"
+/>
+
+<div *ngIf="formData.diagnosed == 1 && eurScore.invalid && eurScore.touched" style="color: red; font-size: 0.9em;">
+  Please enter a valid EUR score (0 or more).
+</div>
+
+    
+  <input
+  type="number"
+  name="AFR"
+  [(ngModel)]="formData.AFR"
+  placeholder="Score AFR"
+  step="0.01"
+  min="0"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #afrScore="ngModel"
+/>
+
+<div *ngIf="formData.diagnosed == 1 && afrScore.invalid && afrScore.touched" style="color: red; font-size: 0.9em;">
+  Please enter a valid AFR score (0 or more).
+</div>
+
+
+   <input
+  type="number"
+  name="EAS"
+  [(ngModel)]="formData.EAS"
+  placeholder="Score EAS"
+  step="0.01"
+  min="0"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #easScore="ngModel"
+/>
+
+<div *ngIf="formData.diagnosed == 1 && easScore.invalid && easScore.touched" style="color: red; font-size: 0.9em;">
+  Please enter a valid EAS score (0 or more).
+</div>
+
+
+   <input
+  type="number"
+  name="AMR"
+  [(ngModel)]="formData.AMR"
+  placeholder="Score AMR"
+  step="0.01"
+  min="0"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #amrScore="ngModel"
+/>
+
+<div *ngIf="formData.diagnosed == 1 && amrScore.invalid && amrScore.touched" style="color: red; font-size: 0.9em;">
+  Please enter a valid AMR score (0 or more).
+</div>
+
+
+
+
+   <input
+  type="number"
+  name="SAS"
+  [(ngModel)]="formData.SAS"
+  placeholder="Score SAS"
+  step="0.01"
+  min="0"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #sasScore="ngModel"
+/>
+
+<div *ngIf="formData.diagnosed == 1 && sasScore.invalid && sasScore.touched" style="color: red; font-size: 0.9em;">
+  Please enter a valid SAS score (0 or more).
+</div>
+
+
+  </div>
+</fieldset>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <fieldset class="form-section">
+      <legend>Medical History</legend>
+    
+      <!-- Antécédents Médicaux -->
+<div class="form-row">
+  
+ <select
+    name="diagadas"
+    required
+    [(ngModel)]="formData.diagadas"
+    #diagadas="ngModel"
+  >
+    <option value="" disabled selected>Adult asthma</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagadas.invalid && diagadas.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Adult asthma
+  </div>
+
+
+  
+
+ <select
+    name="diagasbe"
+    required
+    [(ngModel)]="formData.diagasbe"
+    #diagasbe="ngModel"
+  >
+    <option value="" disabled selected>Asbestosis</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagasbe.invalid && diagasbe.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Asbestosis
+  </div>
+
+
+
+
+  <select
+    name="diagbron"
+    required
+    [(ngModel)]="formData.diagbron"
+    #diagbron="ngModel"
+  >
+    <option value="" disabled selected>Bronchiectasis</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagbron.invalid && diagbron.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Bronchiectasis
+  </div>
+
+
+
+
+
+  <select
+    name="diagchas"
+    required
+    [(ngModel)]="formData.diagchas"
+    #diagchas="ngModel"
+  >
+    <option value="" disabled selected>Asthma (childhood)</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagchas.invalid && diagchas.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Asthma (childhood)
+  </div>
+
+
+
+
+
+  <select
+    name="diagchro"
+    required
+    [(ngModel)]="formData.diagchro"
+    #diagchro="ngModel"
+  >
+    <option value="" disabled selected>Chronic bronchitis</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagchro.invalid && diagchro.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Chronic bronchitis
+  </div>
+
+
+
+
+
+
+
+  <select
+    name="diagcopd"
+    required
+    [(ngModel)]="formData.diagcopd"
+    #diagcopd="ngModel"
+  >
+    <option value="" disabled selected>Chronic Obstructive Pulmonary Disease</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagcopd.invalid && diagcopd.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Chronic Obstructive Pulmonary Disease
+  </div>
+
+
+
+
+
+
+
+  <select
+    name="diagdiab"
+    required
+    [(ngModel)]="formData.diagdiab"
+    #diagdiab="ngModel"
+  >
+    <option value="" disabled selected>Diabetes</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagdiab.invalid && diagdiab.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Diabetes
+  </div>
+
+
+
+
+
+
+
+  <select
+    name="diagemph"
+    required
+    [(ngModel)]="formData.diagemph"
+    #diagemph="ngModel"
+  >
+    <option value="" disabled selected>Emphysema</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagemph.invalid && diagemph.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Emphysema
+  </div>
+
+
+
+
+
+  <select
+    name="diagfibr"
+    required
+    [(ngModel)]="formData.diagfibr"
+    #diagfibr="ngModel"
+  >
+    <option value="" disabled selected>Pulmonary fibrosis</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagfibr.invalid && diagfibr.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Pulmonary fibrosis
+  </div>
+
+
+
+
+
+
+
+
+ <select
+    name="diaghear"
+    required
+    [(ngModel)]="formData.diaghear"
+    #diaghear="ngModel"
+  >
+    <option value="" disabled selected>Heart disease</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diaghear.invalid && diaghear.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Heart disease
+  </div>
+
+
+
+
+
+
+
+  <select
+    name="diaghype"
+    required
+    [(ngModel)]="formData.diaghype"
+    #diaghype="ngModel"
+  >
+    <option value="" disabled selected>Hypertension</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diaghype.invalid && diaghype.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Hypertension
+  </div>
+
+
+
+
+
+  <select
+    name="diagpneu"
+    required
+    [(ngModel)]="formData.diagpneu"
+    #diagpneu="ngModel"
+  >
+    <option value="" disabled selected>Pneumonia</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagpneu.invalid && diagpneu.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Pneumonia
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <select
+    name="diagsarc"
+    required
+    [(ngModel)]="formData.diagsarc"
+    #diagsarc="ngModel"
+  >
+    <option value="" disabled selected>Sarcoidosis</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagsarc.invalid && diagsarc.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Sarcoidosis
+  </div>
+
+
+
+
+
+
+  <select
+    name="diagsili"
+    required
+    [(ngModel)]="formData.diagsili"
+    #diagsili="ngModel"
+  >
+    <option value="" disabled selected>Silicosis</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagsili.invalid && diagsili.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Silicosis
+  </div>
+
+
+
+
+
+
+
+  <select
+    name="diagstro"
+    required
+    [(ngModel)]="formData.diagstro"
+    #diagstro="ngModel"
+  >
+    <option value="" disabled selected>Stroke</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagstro.invalid && diagstro.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Stroke
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <select
+    name="diagtube"
+    required
+    [(ngModel)]="formData.diagtube"
+    #diagtube="ngModel"
+  >
+    <option value="" disabled selected>Tuberculosis</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="diagtube.invalid && diagtube.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Tuberculosis
+  </div>
+
+
+
+
+
+
+
+  <select
+    name="canclung"
+    required
+    [(ngModel)]="formData.canclung"
+    #canclung="ngModel"
+  >
+    <option value="" disabled selected>Lung cancer (anterior)</option>
+    <option [value]="1">Yes</option>
+    <option [value]="0">No</option>
+  </select>
+
+  <div *ngIf="canclung.invalid && canclung.touched" style="color: red; font-size: 0.9em;">
+    Please select an option for Lung cancer (anterior).
+  </div>
+</div>
+</fieldset>
+
+
+      <!-- Tabagisme -->
+       <fieldset class="form-section">
+      <legend>Smoking</legend>
+      <!-- Tabagisme -->
+
+<div class="form-row">
+
+
+  <select
+    name="cigsmok"
+    id="cigsmok"
+    required
+    [(ngModel)]="formData.cigsmok"
+    #cigsmok="ngModel"
+  >
+    <option value="" disabled selected>Smoking status</option>
+    <option [value]="0">Former smoker</option>
+    <option [value]="1">Current smoker</option>
+    <option [value]="-1">Other</option>
+  </select>
+
+  <div *ngIf="cigsmok.invalid && cigsmok.touched" style="color: red; font-size: 0.9em;">
+    Please select the patient's smoking status.
+  </div>
+
+
+
+
+
+  <input
+    type="number"
+    name="age_quit"
+    id="age_quit"
+    placeholder="Age at quitting"
+    min="0"
+    required
+    [(ngModel)]="formData.age_quit"
+    #age_quit="ngModel"
+  />
+
+  <div *ngIf="age_quit.invalid && age_quit.touched" style="color: red; font-size: 0.9em;">
+    Please enter the age at which the patient quit smoking.
+  </div>
+
+
+
+  <input type="number" name="pkyr" id="pkyr" placeholder="Pack years" step="0.01" min="0"
+         [(ngModel)]="formData.pkyr" />
+
+
+
+  <input type="number" name="smokeyr" id="smokeyr" placeholder="Years of smoking" min="0"
+         [(ngModel)]="formData.smokeyr" />
+
+
+
+  <input type="number" name="smokeday" id="smokeday" placeholder="Cigarettes per day" min="0"
+         [(ngModel)]="formData.smokeday"/>
+
+
+</div>
+</fieldset>
+
+
+
+      <!-- Progression Cancer -->
+     <fieldset class="form-section">
+  <legend>Cancer Progression</legend>
+  <div class="form-row">
+
+
+
+
+<select 
+  name="progressed_ever"
+  id="progressed_ever"
+  [(ngModel)]="formData.progressed_ever"
+  [disabled]="formData.diagnosed != 1"
+  [required]="formData.diagnosed == 1"
+  #progressedEver="ngModel"
+>
+  <option value="" disabled selected>Cancer Progression</option>
+  <option value="0">No progression</option>
+  <option value="1">Confirmed progression</option>
+  <option value="-1">Other</option>
+</select>
+
+<div *ngIf="formData.diagnosed == 1 && progressedEver.invalid && progressedEver.touched" style="color: red; font-size: 0.9em;">
+  Please select cancer progression status.
+</div>
+
+
+
+
+
+
+  <input 
+  type="number" 
+  name="prog_days_1st" 
+  id="prog_days_1st" 
+  placeholder="Days before first progression" 
+  min="0"  
+  [(ngModel)]="formData.prog_days_1st"   
+  [disabled]="formData.diagnosed != 1" 
+  [required]="formData.diagnosed == 1"
+  #progDaysFirst="ngModel"
+/>
+
+<div *ngIf="formData.diagnosed == 1 && progDaysFirst.invalid && progDaysFirst.touched" style="color: red; font-size: 0.9em;">
+  Please enter days before first progression.
+</div>
+
+
+ 
+
+      </div>
+      </fieldset>
+      <!-- Survie -->
+<fieldset class="form-section">
+  <legend>Survival</legend>
+
+
+  <div class="form-row" [class.disabled]="formData.diagnosed != 1">
+  <input
+    type="number"
+    name="candx_days"
+    placeholder="Days until diagnosis"
+    [disabled]="formData.diagnosed != 1"
+    [(ngModel)]="formData.candx_days"
+    [required]="formData.diagnosed == 1"
+    #candxDays="ngModel"
+  />
+  <div *ngIf="formData.diagnosed == 1 && candxDays.invalid && candxDays.touched" style="color: red; font-size: 0.9em;">
+    Please enter days until diagnosis.
+  </div>
+
+  <input
+    type="number"
+    name="canc_free_days"
+    placeholder="Cancer-free days"
+    [disabled]="formData.diagnosed != 1"
+    [(ngModel)]="formData.canc_free_days"
+    [required]="formData.diagnosed == 1"
+    #cancFreeDays="ngModel"
+  />
+  <div *ngIf="formData.diagnosed == 1 && cancFreeDays.invalid && cancFreeDays.touched" style="color: red; font-size: 0.9em;">
+    Please enter cancer-free days.
+  </div>
+</div>
+
+</fieldset>
+
+
+
+
+    <!-- Données CT Scan -->
+<fieldset class="form-section">
+  <legend>DCT Scan Data</legend>
+ <div class="form-row">
+  <label for="ctScanImage">Upload CT Scan Image:</label>
+  <input
+    type="file"
+    id="ctScanImage"
+    name="ct_scan_image"
+    accept=".png,.jpg,.jpeg,.dcm"
+    (change)="onFileSelected($event)"
+  />
+
+    <!-- scan date -->
+    <input
+      type="date"
+      name="scan_date"
+      [(ngModel)]="formData.scan_date"
+    />
+  </div>
+</fieldset>
+
+
+
+
+
+    <button type="submit" class="btn btn-add">
+      <i class="fas fa-save"></i> Save
+    </button>
+  </form>
+</div>
+
+<div class="footer">
+   <p>&copy; 2025 Pulmo Precision AI. All rights reserved.</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* CSS inserted below */
+  </style>
+</head>
+<body>
+  <div class="sidebar" [class.hidden]="isSidebarHidden">
+
+     <div class="logo-container">
+    <img src="images/logo app.png" alt="LungApp Logo" class="logo-img" />
+  </div>
+    <ul>
+  <li (click)="navigateToDashboard()" [class.active]="isActive('/admin-dashboard')" style="cursor:pointer;">
+  <i class="fas fa-chart-line"></i>
+  <span class="label">Dashboard</span>
+</li>
+
+
+
+<li (click)="navigateToProfile()" [class.active]="isActive('/admin/profile')" style="cursor: pointer;">
+  <i class="fas fa-user"></i>
+  <span class="label">My Profile</span>
+</li>
+
+
+  <li (click)="navigateToPatients()" [class.active]="isActive('/admin-patient-manager')" style="cursor: pointer;">
+  <i class="fas fa-procedures"></i>
+  <span class="label">Patient Management</span>
+</li>
+
+<li (click)="navigateToDoctors()" [class.active]="isActive('/admin-doctor-management')" style="cursor: pointer;">
+  <i class="fas fa-user-md"></i>
+  <span class="label">Doctor Management</span>
+</li>
+
+  
+  <li (click)="logout()">
+  <i class="fas fa-sign-out-alt"></i>
+  <span class="label">Sign Out</span>
+</li>
+
+</ul>
+
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <div class="toggle-btn" (click)="toggleSidebar()">☰</div>
+      <!-- LOGO -->
+  
+  
+      <div class="admin-info">
+  <img
+    *ngIf="user?.profileImage"
+    [src]="user.profileImage"
+    alt="Profile Image"
+    class="profile-img"
+  />
+  <span class="admin-name"> Admin: {{ user.firstName }} {{ user.lastName }}</span>
+</div>
+</div>
+
+<div class="edit-profile-container">
+  <h2>Add a doctor</h2>
+
+  <form (ngSubmit)="addDoctor()">
+    <label>first name</label>
+    <input type="text" [(ngModel)]="doctor.firstName" name="firstName" required />
+
+    <label>last name</label>
+    <input type="text" [(ngModel)]="doctor.lastName" name="lastName" required />
+
+    <label>Telephone</label>
+    <input type="text" [(ngModel)]="doctor.phoneNumber" name="phoneNumber" />
+
+    <label>City</label>
+    <input type="text" [(ngModel)]="doctor.city" name="city" />
+
+    <label>Address</label>
+    <input type="text" [(ngModel)]="doctor.address" name="address" />
+
+    <label>Email</label>
+    <input type="email" [(ngModel)]="doctor.email" name="email" required />
+
+    <label>Password</label>
+    <input type="password" [(ngModel)]="doctor.password" name="password" required />
+
+    <label>Profile photo</label>
+    <input type="file" (change)="onFileSelected($event)" />
+
+    <button type="submit">Add</button>
+  </form>
+</div>
+
+
+   
+
+    <!-- FOOTER -->
+    <div class="footer">
+       <p>&copy; 2025 Pulmo Precision AI. All rights reserved.</p>
+    </div>
+  </div>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* CSS inserted below */
+  </style>
+</head>
+<body>
+  <div class="sidebar" [class.hidden]="isSidebarHidden">
+
+     <div class="logo-container">
+    <img src="images/logo app.png" alt="LungApp Logo" class="logo-img" />
+  </div>
+    <ul>
+  <li (click)="navigateToDashboard()" [class.active]="isActive('/patient-dashboard')" style="cursor:pointer;">
+  <i class="fas fa-chart-line"></i>
+  <span class="label">Dashboard</span>
+</li>
+
+<li (click)="navigateToProfile()" [class.active]="isActive('/patient-my-profile')" style="cursor: pointer;">
+  <i class="fas fa-user"></i>
+  <span class="label">My Profile</span>
+</li>
+
+
+  
+ <li (click)="navigateToMyDossierMedecale()" [class.active]="isActive('/patient-dossier-medecale/' + user?.id)" style="cursor: pointer;">
+  <i class="fas fa-procedures"></i>
+  <span class="label">Medical File</span>
+</li>
+   <li (click)="navigateToPredictionLungCancer()" 
+    [class.active]="isActive('/resultat-prediction-lung-cancer/' + user?.id)" 
+    style="cursor: pointer;">
+  <i class="fas fa-lungs"></i>
+  <span class="label">Lung cancer Prediction</span>
+</li>
+<li (click)="navigateToPredectionSurvival()" [class.active]="isActive('/resultat-predection-survival')" style="cursor: pointer;">
+  <i class="fas fa-heartbeat"></i>
+  <span class="label">Survival Prediction</span>
+</li>
+
+  
+  <li (click)="navigateToRecomandationTreatement()" [class.active]="isActive('/resultat-recomandation-traitement')" style="cursor: pointer;">
+  <i class="fas fa-pills"></i>
+  <span class="label">Treatment Recommendation</span>
+</li>
+  <li (click)="logout()">
+  <i class="fas fa-sign-out-alt"></i>
+  <span class="label">Sign Out</span>
+</li>
+
+</ul>
+
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <div class="toggle-btn" (click)="toggleSidebar()">☰</div>
+      <!-- LOGO -->
+  
+     
+      <div class="admin-info">
+        
+ <!-- Notification Icon -->
+<div class="notification-container" (click)="toggleNotificationDropdown()">
+  <i class="fas fa-bell"></i>
+  <span *ngIf="unreadCount > 0" class="badge">{{ unreadCount }}</span>
+</div>
+
+<!-- Notification Dropdown -->
+<div class="notification-dropdown" *ngIf="showNotifications">
+  <!-- <div *ngFor="let notif of notifications" class="notification-item" (click)="handleNotificationClick(notif)">
+    <p>{{ notif.message }}</p>
+    <small>{{ notif.created_at | date:'short' }}</small>
+  </div> -->
+  <div 
+  *ngFor="let notif of sortedNotifications" 
+  class="notification-item" 
+  [ngClass]="{ 'unread': !notif.is_read, 'read': notif.is_read }"
+  (click)="handleNotificationClick(notif)"
+>
+  <p>{{ notif.message }}</p>
+  <small>{{ notif.created_at | date:'short' }}</small>
+</div>
+
+</div> 
+
+
+
+  <img
+    *ngIf="user?.profileImage"
+    [src]="user.profileImage"
+    alt="Profile Image"
+    class="profile-img"
+  />
+  <span class="admin-name"> Patient: {{ user.firstName }} {{ user.lastName }}</span>
+</div>
+
+    </div>
+
+   <div class="profile-page">
+  <div class="profile-card">
+    <img [src]="user?.profileImage" alt="Profile" class="profile-picture" />
+
+   <h2 class="name">{{ user?.firstName }} {{ user?.lastName }}</h2>
+<p class="role">Patient</p>
+  </div>
+
+  <div class="info-card">
+    <h2>Profile Details</h2>
+    <ul>
+        <li><strong>First Name:</strong> {{ user?.firstName }}</li>
+        <li><strong>Last Name:</strong> {{ user?.lastName }}</li>
+        <li><strong>Email:</strong> {{ user?.email }}</li>
+        <li><strong>Phone:</strong> {{ user?.phoneNumber }}</li>
+        <li><strong>City:</strong> {{ user?.city }}</li>
+        <li><strong>Address:</strong> {{ user?.address }}</li>
+    </ul>
+  </div>
+</div>
+<div class="button-container">
+  <button routerLink="/patient/edit-profile" class="edit-btn">Edit Profile</button>
+</div>
+
+
+
+
+    <!-- FOOTER -->
+    <div class="footer">
+ <p>&copy; 2025 Pulmo Precision AI. All rights reserved.</p>
+    </div>
+  </div>
+
+
+
+
+</body>
+</html>

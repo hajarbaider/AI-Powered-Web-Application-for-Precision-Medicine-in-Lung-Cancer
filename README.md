@@ -144,3 +144,5 @@ Based on experimental results, **VGG16** was selected as the final model due to:
 
 The final solution is based on a fine-tuned VGG16 architecture.
 
+![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/architecture%20pour%20la%20pr%C3%A9diction.jpg?raw=true)
+

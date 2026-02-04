@@ -146,3 +146,39 @@ The final solution is based on a fine-tuned VGG16 architecture.
 
 ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/architecture%20pour%20la%20pr%C3%A9diction.jpg?raw=true)
 
+### 2️⃣ Survival Prediction
+This module focuses on predicting the survival time and mortality risk of lung cancer patients using clinical data and machine learning techniques. It supports clinical decision-making by estimating patient prognosis and long-term survival probability.
+---
+### 📊 Dataset
+
+We used clinical data from the **National Lung Cancer Screening Trial (NLST)**.
+
+- Study Period: 2002 – 2004
+- Participants: Lung cancer patients
+- Data Source: LDCT screening
+- Data Type:
+  - Demographics
+  - Medical history
+  - Smoking behavior
+  - Cancer progression
+  - Survival records
+
+The NLST dataset represents one of the largest public resources for lung cancer research.
+
+---
+### ⚙️ Data Preprocessing
+
+The following preprocessing steps were applied:
+
+- Exploratory data analysis
+- Feature selection based on clinical relevance
+- Patient filtering (lung cancer cases only)
+- Missing value handling
+- Variable standardization
+- Variable renaming (duration, event)
+
+These steps ensured a clean and consistent dataset.
+
+---
+
+

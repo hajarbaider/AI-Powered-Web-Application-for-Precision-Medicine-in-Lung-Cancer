@@ -228,7 +228,10 @@ The survival prediction system follows a multi-stage pipeline.
 
 ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/Hybrid%20Pipeline%20for%20Survival%20Prediction%20Based%20on%20RSF,%20CoxPH,%20and%20SVM%20for%20Survival..jpg?raw=true)
 
+---
 
 
+
+### 3️⃣ Treatment Recommendation
 
 

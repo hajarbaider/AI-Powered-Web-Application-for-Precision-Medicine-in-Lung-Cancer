@@ -226,7 +226,7 @@ This ensemble approach improves robustness and prediction accuracy.
 
 The survival prediction system follows a multi-stage pipeline.
 
-![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/architecture%20pour%20la%20pr%C3%A9diction.jpg?raw=true)
+![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/Hybrid%20Pipeline%20for%20Survival%20Prediction%20Based%20on%20RSF,%20CoxPH,%20and%20SVM%20for%20Survival..jpg?raw=true)
 
 
 

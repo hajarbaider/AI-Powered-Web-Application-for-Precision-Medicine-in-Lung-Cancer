@@ -234,4 +234,46 @@ The survival prediction system follows a multi-stage pipeline.
 
 ### 3️⃣ Treatment Recommendation
 
+This module focuses on recommending personalized treatment strategies for patients with Non-Small Cell Lung Cancer (NSCLC) by integrating clinical and genomic data. It predicts both the appropriate treatment type and the most suitable therapeutic agent for each patient.
 
+---
+
+### 📊 Dataset
+We used multidimensional data from the **TCGA Pan-Cancer Atlas (2018)** via cBioPortal.
+
+- Subtypes:
+  - LUAD (Lung Adenocarcinoma)
+  - LUSC (Lung Squamous Cell Carcinoma)
+- Total Samples: > 1,000 patients
+- Data Types:
+  - Clinical data
+  - Genomic mutations
+  - Copy number variations
+  - DNA methylation
+  - Gene and protein expression
+  - Treatment records
+
+Sources:
+- LUAD Dataset
+- LUSC Dataset
+---
+### ⚙️ Data Preprocessing
+
+The following preprocessing steps were applied:
+
+- File selection and conversion (TXT → CSV)
+- Data merging (clinical + genomic + treatment data)
+- Patient filtering (successful or partial response)
+- Feature selection (EGFR, ALK and key biomarkers)
+- Missing value handling
+- Categorical encoding
+- Class balancing using oversampling
+
+Treatment Type:
+- Chemotherapy
+- Radiation Therapy
+
+Treatment Agents:
+- 12 drug categories (Cisplatin, Carboplatin, Paclitaxel, etc.)
+
+---

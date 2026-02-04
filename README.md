@@ -323,6 +323,12 @@ Based on experimental results:
 These models achieved the best balance between accuracy and stability.
 
 ---
+### 🏗️ Model Architecture
+
+The treatment recommendation system follows a two-stage pipeline.
+
+
+
 
 
 

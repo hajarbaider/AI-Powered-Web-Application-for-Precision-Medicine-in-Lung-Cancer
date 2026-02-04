@@ -327,8 +327,7 @@ These models achieved the best balance between accuracy and stability.
 
 The treatment recommendation system follows a two-stage pipeline.
 
-
-
+![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/Architecture%20for%20treatment%20recommendation%20in%20patients%20with%20lung%20cancer%20using%20clinical%20and%20genomic%20data..jpg?raw=true)
 
 
 

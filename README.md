@@ -277,3 +277,42 @@ Treatment Agents:
 - 12 drug categories (Cisplatin, Carboplatin, Paclitaxel, etc.)
 
 ---
+
+
+
+### 🤖 Machine Learning Models Evaluated
+
+Two classification tasks were performed:
+
+#### 1️⃣ Treatment Type Prediction
+- Random Forest
+- LightGBM
+- Logistic Regression
+- MLP
+
+#### 2️⃣ Treatment Agent Prediction
+- Random Forest
+- Logistic Regression
+- KNN
+- Gaussian Naive Bayes
+- MLP
+
+---
+### 📈 Evaluation Metrics
+
+Model performance was evaluated using:
+
+- Accuracy
+- Precision
+- Recall
+- F1-Score
+- K-Fold Cross-Validation
+  - Mean CV Accuracy
+  - Std CV
+
+These metrics assess model accuracy, stability, and generalization.
+
+---
+
+
+

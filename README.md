@@ -313,6 +313,17 @@ Model performance was evaluated using:
 These metrics assess model accuracy, stability, and generalization.
 
 ---
+### 🏆 Selected Models
+
+Based on experimental results:
+
+- Treatment Type → **LightGBM**
+- Treatment Agent → **Random Forest**
+
+These models achieved the best balance between accuracy and stability.
+
+---
+
 
 
 

@@ -329,6 +329,65 @@ The treatment recommendation system follows a two-stage pipeline.
 
 ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/Architecture%20for%20treatment%20recommendation%20in%20patients%20with%20lung%20cancer%20using%20clinical%20and%20genomic%20data..jpg?raw=true)
 
+### 4️⃣ Biomedical Knowledge Extraction (NLP)
 
 
+This module focuses on automatically analyzing biomedical research articles to support medical discovery in lung cancer. It uses Natural Language Processing (NLP) and transformer-based models to extract, summarize, and annotate scientific publications from PubMed.
+
+The system helps identify potential biomarkers, treatments, and clinical trials for AI-assisted medical research.
+
+---
+
+
+### 📊 Data Source: PubMed
+
+We used data from **PubMed**, one of the largest biomedical literature databases.
+
+- Total Records: > 38 million abstracts
+- Provider: NCBI (NIH, USA)
+- Content: Biomedical and life sciences publications
+- Availability: Abstracts with links to full texts
+
+PubMed ensures high-quality and peer-reviewed scientific data.
+
+---
+
+
+### 🤖 NLP & Transformer Models Used
+
+The system integrates several state-of-the-art transformer models:
+
+#### 🔹 Text Summarization
+- **BART** (facebook/bart-large-cnn)
+- Task: Automatic abstract summarization
+
+#### 🔹 Text Classification
+- **PubMedBERT**
+  (microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract)
+- Task: Article categorization
+
+#### 🔹 Named Entity Recognition (NER)
+- **d4data/biomedical-ner-all**
+- Task: Extraction of biomedical entities
+
+---
+
+### 📁 Output Format
+
+Each processed article is stored in JSON format containing:
+
+- Title
+- URL
+- Category
+- Generated Summary
+- Annotated Summary
+- Highlighted Entities
+
+This structured format enables easy integration into clinical and research systems.
+
+---
+### 🏗️ System Architecture
+
+The NLP system is based on a modular transformer pipeline.
+![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/Architecture%20for%20treatment%20recommendation%20in%20patients%20with%20lung%20cancer%20using%20clinical%20and%20genomic%20data..jpg?raw=true)
 

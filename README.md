@@ -146,6 +146,8 @@ The final solution is based on a fine-tuned VGG16 architecture.
 
 ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/architecture%20pour%20la%20pr%C3%A9diction.jpg?raw=true)
 
+---
+
 ### 2️⃣ Survival Prediction
 This module focuses on predicting the survival time and mortality risk of lung cancer patients using clinical data and machine learning techniques. It supports clinical decision-making by estimating patient prognosis and long-term survival probability.
 ---
@@ -180,5 +182,53 @@ The following preprocessing steps were applied:
 These steps ensured a clean and consistent dataset.
 
 ---
+### 🤖 Survival Models Evaluated
+
+Several survival analysis models were implemented and compared:
+
+- Cox Proportional Hazards (CoxPH)
+- Random Survival Forest (RSF)
+- Survival Support Vector Machine (SVM)
+- XGBoost
+- TabNet
+- Hybrid Ensemble Model (Stacking)
+
+The hybrid model combines RSF, CoxPH, and SVM.
+
+### 📈 Evaluation Metrics
+
+Model performance was evaluated using:
+
+- Concordance Index (C-index)
+- Area Under Curve (AUC)
+- Integrated Brier Score (IBS)
+
+These metrics assess ranking ability, prediction accuracy, and probability calibration.
+
+
+---
+### 🏆 Selected Model: Hybrid Ensemble
+
+Based on experimental results, a hybrid stacking model was selected.
+
+**Base Models:**
+- RSF
+- CoxPH
+- SVM
+
+**Meta-Model:**
+- Random Survival Forest
+
+This ensemble approach improves robustness and prediction accuracy.
+
+---
+### 🏗️ Model Architecture
+
+The survival prediction system follows a multi-stage pipeline.
+
+![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/architecture%20pour%20la%20pr%C3%A9diction.jpg?raw=true)
+
+
+
 
 

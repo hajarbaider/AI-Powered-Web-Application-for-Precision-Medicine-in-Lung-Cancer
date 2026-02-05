@@ -440,7 +440,7 @@ The NLP system is based on a modular transformer pipeline.
 
   ### 🔹 Administrator Area
 - Dashboard
-    ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/Error%20in%20authentication..jpg?raw=true)
+    ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/Administrator%20dashboard.png?raw=true)
 - User Management
 - Profile Management
 - Doctor & Patient Management

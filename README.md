@@ -55,7 +55,7 @@ Database (MySQL)
 ### 1️⃣ Lung Cancer Detection (CT Scans)
 This module focuses on the automatic detection of lung cancer from CT scan images using deep learning techniques. The objective is to identify the most reliable model capable of accurately distinguishing between normal and malignant lung tissues.
 
-### 📊 Dataset
+#### 📊 Dataset
 
 We used the **IQ-OTH/NCCD** dataset, collected from specialized oncology centers in Iraq.
 
@@ -71,7 +71,7 @@ We used the **IQ-OTH/NCCD** dataset, collected from specialized oncology centers
 
 After preprocessing, only **Normal** and **Malignant** classes were retained for binary classification.
 
-### ⚙️ Data Preprocessing
+#### ⚙️ Data Preprocessing
 
 The following preprocessing steps were applied:
 
@@ -87,7 +87,7 @@ These steps improved model stability and reduced overfitting.
 
 ---
 
-### 🤖 Deep Learning Models Evaluated
+#### 🤖 Deep Learning Models Evaluated
 
 We evaluated several pre-trained CNN architectures using transfer learning:
 
@@ -104,7 +104,7 @@ We evaluated several pre-trained CNN architectures using transfer learning:
 All models were fine-tuned on our dataset under the same training conditions.
 ---
 
-### 🧪 Training Configuration
+#### 🧪 Training Configuration
 
 | Parameter   | Value |
 |-------------|--------|
@@ -116,7 +116,7 @@ All models were fine-tuned on our dataset under the same training conditions.
 
 ---
 
-### 📈 Evaluation Metrics
+#### 📈 Evaluation Metrics
 
 Model performance was evaluated using:
 
@@ -130,7 +130,7 @@ These metrics were computed using TP, TN, FP, and FN values.
 
 ---
 
-### 🏆 Selected Model: VGG16
+#### 🏆 Selected Model: VGG16
 
 Based on experimental results, **VGG16** was selected as the final model due to:
 
@@ -140,7 +140,7 @@ Based on experimental results, **VGG16** was selected as the final model due to:
 - Strong generalization ability
 
 ---
-### 🏗️ Model Architecture
+#### 🏗️ Model Architecture
 
 The final solution is based on a fine-tuned VGG16 architecture.
 
@@ -151,7 +151,7 @@ The final solution is based on a fine-tuned VGG16 architecture.
 ### 2️⃣ Survival Prediction
 This module focuses on predicting the survival time and mortality risk of lung cancer patients using clinical data and machine learning techniques. It supports clinical decision-making by estimating patient prognosis and long-term survival probability.
 ---
-### 📊 Dataset
+#### 📊 Dataset
 
 We used clinical data from the **National Lung Cancer Screening Trial (NLST)**.
 
@@ -168,7 +168,7 @@ We used clinical data from the **National Lung Cancer Screening Trial (NLST)**.
 The NLST dataset represents one of the largest public resources for lung cancer research.
 
 ---
-### ⚙️ Data Preprocessing
+#### ⚙️ Data Preprocessing
 
 The following preprocessing steps were applied:
 
@@ -182,7 +182,7 @@ The following preprocessing steps were applied:
 These steps ensured a clean and consistent dataset.
 
 ---
-### 🤖 Survival Models Evaluated
+#### 🤖 Survival Models Evaluated
 
 Several survival analysis models were implemented and compared:
 
@@ -195,7 +195,7 @@ Several survival analysis models were implemented and compared:
 
 The hybrid model combines RSF, CoxPH, and SVM.
 
-### 📈 Evaluation Metrics
+#### 📈 Evaluation Metrics
 
 Model performance was evaluated using:
 
@@ -207,7 +207,7 @@ These metrics assess ranking ability, prediction accuracy, and probability calib
 
 
 ---
-### 🏆 Selected Model: Hybrid Ensemble
+#### 🏆 Selected Model: Hybrid Ensemble
 
 Based on experimental results, a hybrid stacking model was selected.
 
@@ -222,7 +222,7 @@ Based on experimental results, a hybrid stacking model was selected.
 This ensemble approach improves robustness and prediction accuracy.
 
 ---
-### 🏗️ Model Architecture
+#### 🏗️ Model Architecture
 
 The survival prediction system follows a multi-stage pipeline.
 
@@ -238,7 +238,7 @@ This module focuses on recommending personalized treatment strategies for patien
 
 ---
 
-### 📊 Dataset
+#### 📊 Dataset
 We used multidimensional data from the **TCGA Pan-Cancer Atlas (2018)** via cBioPortal.
 
 - Subtypes:
@@ -257,7 +257,7 @@ Sources:
 - LUAD Dataset
 - LUSC Dataset
 ---
-### ⚙️ Data Preprocessing
+#### ⚙️ Data Preprocessing
 
 The following preprocessing steps were applied:
 
@@ -280,17 +280,17 @@ Treatment Agents:
 
 
 
-### 🤖 Machine Learning Models Evaluated
+#### 🤖 Machine Learning Models Evaluated
 
 Two classification tasks were performed:
 
-#### 1️⃣ Treatment Type Prediction
+##### 1️⃣ Treatment Type Prediction
 - Random Forest
 - LightGBM
 - Logistic Regression
 - MLP
 
-#### 2️⃣ Treatment Agent Prediction
+##### 2️⃣ Treatment Agent Prediction
 - Random Forest
 - Logistic Regression
 - KNN
@@ -298,7 +298,7 @@ Two classification tasks were performed:
 - MLP
 
 ---
-### 📈 Evaluation Metrics
+#### 📈 Evaluation Metrics
 
 Model performance was evaluated using:
 
@@ -313,7 +313,7 @@ Model performance was evaluated using:
 These metrics assess model accuracy, stability, and generalization.
 
 ---
-### 🏆 Selected Models
+#### 🏆 Selected Models
 
 Based on experimental results:
 
@@ -323,7 +323,7 @@ Based on experimental results:
 These models achieved the best balance between accuracy and stability.
 
 ---
-### 🏗️ Model Architecture
+#### 🏗️ Model Architecture
 
 The treatment recommendation system follows a two-stage pipeline.
 
@@ -339,7 +339,7 @@ The system helps identify potential biomarkers, treatments, and clinical trials 
 ---
 
 
-### 📊 Data Source: PubMed
+#### 📊 Data Source: PubMed
 
 We used data from **PubMed**, one of the largest biomedical literature databases.
 
@@ -353,26 +353,26 @@ PubMed ensures high-quality and peer-reviewed scientific data.
 ---
 
 
-### 🤖 NLP & Transformer Models Used
+#### 🤖 NLP & Transformer Models Used
 
 The system integrates several state-of-the-art transformer models:
 
-#### 🔹 Text Summarization
+##### 🔹 Text Summarization
 - **BART** (facebook/bart-large-cnn)
 - Task: Automatic abstract summarization
 
-#### 🔹 Text Classification
+##### 🔹 Text Classification
 - **PubMedBERT**
   (microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract)
 - Task: Article categorization
 
-#### 🔹 Named Entity Recognition (NER)
+##### 🔹 Named Entity Recognition (NER)
 - **d4data/biomedical-ner-all**
 - Task: Extraction of biomedical entities
 
 ---
 
-### 📁 Output Format
+#### 📁 Output Format
 
 Each processed article is stored in JSON format containing:
 
@@ -386,7 +386,7 @@ Each processed article is stored in JSON format containing:
 This structured format enables easy integration into clinical and research systems.
 
 ---
-### 🏗️ System Architecture
+#### 🏗️ System Architecture
 
 The NLP system is based on a modular transformer pipeline.
 ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/Architecture%20using%20NLP%20techniques%20and%20transformer-based%20models%20for%20novel%20discoveries..jpg?raw=true)

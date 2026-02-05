@@ -391,6 +391,8 @@ This structured format enables easy integration into clinical and research syste
 The NLP system is based on a modular transformer pipeline.
 ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/Architecture%20using%20NLP%20techniques%20and%20transformer-based%20models%20for%20novel%20discoveries..jpg?raw=true)
 
+
+---
 ## 💻 Technologies Used
 
 ### Backend

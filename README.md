@@ -434,5 +434,5 @@ The NLP system is based on a modular transformer pipeline.
 ### 🔹 Authentication
 - Login Page
   ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/Home%20page.jpg?raw=true)
-   ![image alt]()
+   ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/User%20authentication%20page.jpg?raw=true)
 - Error Handling

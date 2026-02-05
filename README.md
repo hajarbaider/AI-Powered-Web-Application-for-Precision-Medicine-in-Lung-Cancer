@@ -149,7 +149,10 @@ The final solution is based on a fine-tuned VGG16 architecture.
 ---
 
 ### 2️⃣ Survival Prediction
+
+
 This module focuses on predicting the survival time and mortality risk of lung cancer patients using clinical data and machine learning techniques. It supports clinical decision-making by estimating patient prognosis and long-term survival probability.
+
 ---
 #### 📊 Dataset
 
@@ -441,6 +444,6 @@ The NLP system is based on a modular transformer pipeline.
   ### 🔹 Administrator Area
 - Dashboard
     ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/Administrator%20dashboard.png?raw=true)
-- User Management
 - Profile Management
+  
 - Doctor & Patient Management

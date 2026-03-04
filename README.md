@@ -458,3 +458,4 @@ The NLP system is based on a modular transformer pipeline.
 
 ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/Doctor%20dashbord.jpeg?raw=true)
 ![image alt](https://github.com/hajarbaider/AI-Powered-Web-Application-for-Precision-Medicine-in-Lung-Cancer/blob/main/patient%20list%20doctor.jpg?raw=true)
+- Medical Records
